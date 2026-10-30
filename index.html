@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HBCU Outcomes Navigator — Creed-to-Commerce™ | Professor Zaid Adib Ansari</title>
+<meta name="description" content="An institutional-effectiveness app that turns IPEDS and institutional data into outcomes for HBCUs — by Professor Zaid Adib Ansari, The Balanced Middle Path Academy, LLC.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#0F4D3A; --green2:#17825A; --gold:#B07D0E; --goldl:#C9A227; --blue:#2F5D9E; --rust:#B0472A;
+  --cream:#FBF8EF; --paper:#FFFFFF; --ink:#1D2A24; --ink2:#4A5A52; --muted:#7A877F; --line:#E4DFCF; --brown:#5B3A1E;
+  --good:#17825A; --warn:#B07D0E; --bad:#B0472A;
+  --chart-surface:#FCFCFB;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+h1,h2,h3{font-family:"Amiri",Georgia,serif;color:var(--green);line-height:1.2;margin:0 0 .5rem}
+h1{font-size:2.2rem} h2{font-size:1.6rem} h3{font-size:1.2rem}
+p{margin:.4rem 0 .8rem}
+a{color:var(--green2)}
+.app{max-width:1240px;margin:0 auto;padding:0 16px 40px}
+header.top{background:linear-gradient(135deg,var(--green),#0A3326);color:#fff;border-bottom:4px solid var(--goldl)}
+header.top .in{max-width:1240px;margin:0 auto;padding:14px 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.brand{display:flex;flex-direction:column}
+.bismillah{font-family:"Amiri",serif;font-size:1.5rem;color:var(--goldl);direction:rtl;line-height:1.3}
+.brand .t{font-family:"Amiri",serif;font-size:1.25rem;font-weight:700;letter-spacing:.2px}
+.brand .s{font-size:.78rem;opacity:.85}
+.hdr-actions{display:flex;gap:8px;flex-wrap:wrap}
+nav.tabs{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);box-shadow:0 2px 6px rgba(0,0,0,.04)}
+nav.tabs .in{max-width:1240px;margin:0 auto;padding:0 8px;display:flex;overflow-x:auto;gap:2px;scrollbar-width:thin}
+nav.tabs button{flex:none;background:none;border:0;padding:12px 12px;font:600 13.5px system-ui;color:var(--ink2);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
+nav.tabs button:hover{color:var(--green)}
+nav.tabs button.on{color:var(--green);border-bottom-color:var(--goldl)}
+section.view{display:none;padding-top:22px}
+section.view.on{display:block}
+.btn{background:var(--green);color:#fff;border:0;border-radius:8px;padding:9px 14px;font:600 13.5px system-ui;cursor:pointer;display:inline-flex;gap:6px;align-items:center;text-decoration:none}
+.btn:hover{background:#0B3C2D}
+.btn.gold{background:var(--goldl);color:#1b1500}
+.btn.gold:hover{background:#B8901C}
+.btn.ghost{background:transparent;color:var(--green);border:1.5px solid var(--green)}
+.btn.ghost:hover{background:#EAF3EE}
+.btn.danger{background:var(--rust)}
+.btn.danger:hover{background:#8E3A22}
+.btn.sm{padding:5px 9px;font-size:12.5px;border-radius:6px}
+header .btn.ghost{color:#fff;border-color:rgba(255,255,255,.6)}
+header .btn.ghost:hover{background:rgba(255,255,255,.12)}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.card.tint{background:#F3F8F5}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g2b{grid-template-columns:repeat(auto-fit,minmax(470px,1fr))}
+@media(max-width:560px){.g2b{grid-template-columns:1fr}}
+.g4{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.hero{background:linear-gradient(135deg,#0F4D3A 0%,#136B4D 60%,#1d7d5b 100%);color:#fff;border-radius:18px;padding:30px 28px;margin-bottom:18px;position:relative;overflow:hidden}
+.hero h1{color:#fff;font-size:2.4rem}
+.hero p{max-width:760px;font-size:1.05rem;opacity:.95}
+.hero span.gold{color:var(--goldl)}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;border:34px solid rgba(201,162,39,.18)}
+.pill{display:inline-block;background:rgba(201,162,39,.18);color:var(--goldl);border:1px solid rgba(201,162,39,.5);padding:3px 10px;border-radius:99px;font-size:12px;font-weight:600;margin:0 6px 6px 0}
+.pill.dk{background:#F6EFD6;color:#6a4b00;border-color:#E3D08A}
+.kpi{padding:14px 16px}
+.kpi .l{font-size:12px;color:var(--ink2);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.kpi .v{font-family:"Amiri",serif;font-size:2.1rem;color:var(--green);font-weight:700;line-height:1.15}
+.kpi .d{font-size:12.5px;color:var(--ink2)}
+.up{color:var(--good);font-weight:700}.dn{color:var(--bad);font-weight:700}
+.note{font-size:12.5px;color:var(--ink2);background:#FFF9E5;border-left:4px solid var(--goldl);padding:8px 12px;border-radius:6px;margin:10px 0}
+.note.red{background:#FBEDE8;border-left-color:var(--rust)}
+.sample-banner{background:#FFF4D6;border:1px solid #E3D08A;color:#5a4100;border-radius:10px;padding:9px 14px;margin-bottom:14px;font-size:13px}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{background:#F3F8F5;color:var(--green);font-size:12px;text-transform:uppercase;letter-spacing:.4px;position:sticky;top:0}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.tw{overflow:auto;max-height:420px;border:1px solid var(--line);border-radius:10px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;align-items:center}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:700}
+.b-good{background:#E1F3EA;color:#0C6B47}.b-warn{background:#FBF0D2;color:#7A5600}.b-bad{background:#F9E1DA;color:#8E2F17}.b-mute{background:#ECEFEC;color:#46534C}
+label{font-size:12.5px;font-weight:600;color:var(--ink2);display:block;margin-bottom:3px}
+input,select,textarea{width:100%;padding:8px 10px;border:1px solid #C9C4B1;border-radius:8px;font:inherit;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--goldl);outline-offset:1px}
+input[type=range]{padding:0;accent-color:var(--green2)}
+.row{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.chart-card{padding:14px 14px 10px}
+.chart-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.chart-head h3{margin:0;font-size:1.1rem}
+.chart-sub{font-size:12.5px;color:var(--ink2);margin:2px 0 6px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--ink2);margin:4px 0}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.legend i.dash{height:0;border-top:3px dashed;width:16px;border-radius:0;vertical-align:3px}
+.plot{position:relative;background:var(--chart-surface);border-radius:10px}
+.plot svg{width:100%;height:auto;display:block}
+.tip{position:absolute;pointer-events:none;background:#fff;border:1px solid var(--line);box-shadow:0 4px 14px rgba(0,0,0,.14);border-radius:8px;padding:7px 10px;font-size:12.5px;z-index:5;min-width:130px;display:none}
+.tip b{display:block;margin-bottom:3px;color:var(--ink)}
+.tip span.sw{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px}
+.ax{font:11px system-ui;fill:#5b6a62}.gl{stroke:#E7E3D4;stroke-width:1}
+.dtable{display:none;margin-top:6px}
+.meter{height:10px;background:#E9EEEA;border-radius:6px;overflow:hidden}
+.meter>div{height:100%;background:var(--green2);border-radius:6px}
+details.lesson{border:1px solid var(--line);border-radius:10px;margin-bottom:8px;background:#fff}
+details.lesson summary{cursor:pointer;padding:12px 14px;font-weight:700;color:var(--green)}
+details.lesson .b{padding:0 16px 14px}
+.step{display:flex;gap:12px;align-items:flex-start}
+.step .n{flex:none;width:34px;height:34px;border-radius:50%;background:var(--goldl);color:#1b1500;font-weight:800;display:flex;align-items:center;justify-content:center}
+.pipeline{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.pipeline .st{background:#F3F8F5;border:1px solid #CFE3D8;border-radius:12px;padding:12px;position:relative}
+.pipeline .st b{color:var(--green);display:block}
+.prof{display:grid;gap:20px;grid-template-columns:minmax(220px,300px) 1fr;align-items:start}
+@media(max-width:760px){.prof{grid-template-columns:1fr} h1{font-size:1.8rem} .hero h1{font-size:1.9rem}}
+.avatar{width:100%;aspect-ratio:1/1;max-width:260px;border-radius:20px;background:linear-gradient(135deg,var(--green),#136B4D);display:flex;align-items:center;justify-content:center;color:var(--goldl);font:700 4.4rem "Amiri",serif;border:4px solid var(--goldl)}
+.stat{text-align:center;padding:12px;border-radius:12px;background:#F3F8F5;border:1px solid #CFE3D8}
+.stat b{display:block;font:700 2rem "Amiri",serif;color:var(--green)}
+.stat span{font-size:12.5px;color:var(--ink2)}
+.tier h3{margin-bottom:2px}
+.tier ul{padding-left:18px;margin:8px 0}
+.tier.featured{border:2px solid var(--goldl);background:#FFFCF0}
+dialog{border:0;border-radius:14px;padding:0;max-width:560px;width:calc(100% - 32px);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+dialog::backdrop{background:rgba(10,30,22,.5)}
+dialog .dh{background:var(--green);color:#fff;padding:12px 18px;font:700 1.2rem "Amiri",serif}
+dialog .db{padding:16px 18px;max-height:70vh;overflow:auto}
+dialog .df{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--green);color:#fff;padding:10px 18px;border-radius:99px;font-weight:600;z-index:99;display:none;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+footer.site{margin-top:30px;background:var(--green);color:#fff;border-top:4px solid var(--goldl)}
+footer.site .in{max-width:1240px;margin:0 auto;padding:22px 16px;display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;font-size:13px}
+footer.site a{color:var(--goldl)}
+.paper{background:#fff;color:#111;padding:26px 30px;border:1px solid var(--line);border-radius:6px}
+.paper h1{font-size:1.9rem;margin-bottom:2px}.paper h2{font-size:1.35rem;border-bottom:2px solid var(--goldl);padding-bottom:3px;margin-top:20px}
+.paper .rh{display:flex;justify-content:space-between;gap:14px;border-bottom:4px solid var(--goldl);padding-bottom:10px;margin-bottom:12px}
+.paper .rh .bm{font-family:"Amiri",serif;color:var(--goldl);font-size:1.3rem;direction:rtl}
+.paper .kg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.paper .kg div{border:1px solid var(--line);border-radius:8px;padding:8px;text-align:center}
+.paper .kg b{display:block;font:700 1.5rem "Amiri",serif;color:var(--green)}
+.paper .kg span{font-size:11px;color:#555}
+.paper .avoid{break-inside:avoid;page-break-inside:avoid}
+.paper table{font-size:11.5px}
+.paper .foot{margin-top:18px;border-top:2px solid var(--goldl);padding-top:8px;font-size:11px;color:#444}
+.paper svg{max-width:100%;height:auto}
+.mini{font-size:12.5px;color:var(--ink2)}
+#printArea{display:none}
+@media print{
+  @page{margin:14mm}
+  body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .app,header.top,nav.tabs,footer.site,#toast,dialog{display:none!important}
+  #printArea{display:block!important}
+  .paper{border:0;padding:0}
+  .paper h2{break-after:avoid}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="in">
+  <div class="brand">
+    <div class="bismillah" lang="ar">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
+    <div class="t">HBCU Outcomes Navigator</div>
+    <div class="s">From IPEDS compliance to institutional effectiveness · Creed-to-Commerce™</div>
+  </div>
+  <div class="hdr-actions">
+    <button class="btn ghost" data-go="about">Meet Professor Ansari</button>
+    <button class="btn gold" data-go="reports">PDF Reports</button>
+    <button class="btn gold" id="hdrContact">Contact</button>
+  </div>
+</div></header>
+
+<nav class="tabs"><div class="in" id="tabs"></div></nav>
+
+<main class="app">
+  <section class="view" id="v-overview"></section>
+  <section class="view" id="v-data"></section>
+  <section class="view" id="v-dash"></section>
+  <section class="view" id="v-alert"></section>
+  <section class="view" id="v-scenario"></section>
+  <section class="view" id="v-actions"></section>
+  <section class="view" id="v-hub"></section>
+  <section class="view" id="v-lead"></section>
+  <section class="view" id="v-comp"></section>
+  <section class="view" id="v-reports"></section>
+  <section class="view" id="v-services"></section>
+  <section class="view" id="v-about"></section>
+  <section class="view" id="v-manual"></section>
+  <section class="view" id="v-settings"></section>
+</main>
+
+<footer class="site"><div class="in">
+  <div>
+    <div class="bismillah" style="color:var(--goldl);font-size:1.2rem" lang="ar">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
+    <b>Creed-to-Commerce™</b> · The Balanced Middle Path Academy, LLC (BMPA)<br>
+    Founder &amp; Principal Consultant: Professor Zaid Adib Ansari
+  </div>
+  <div>Contact: <a id="ftMail" href="#">email</a><br><span class="mini" style="color:#cfe3d8">Sample data is illustrative. Always verify against official IPEDS / NCES figures.</span></div>
+</div></footer>
+
+<dialog id="dlg"><form method="dialog" id="dlgForm" novalidate>
+  <div class="dh" id="dlgTitle"></div>
+  <div class="db" id="dlgBody"></div>
+  <div class="df" id="dlgFoot"></div>
+</form></dialog>
+<div id="toast" role="status"></div>
+<div id="printArea"></div>
+<script>
+"use strict";
+/* ============ Utilities ============ */
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Math.random().toString(36).slice(2,9);
+const fN=n=>(n==null||n===''||isNaN(n))?'–':Number(n).toLocaleString(undefined,{maximumFractionDigits:0});
+const fP=n=>(n==null||n===''||isNaN(n))?'–':Number(n).toFixed(1)+'%';
+const fM=n=>(n==null||isNaN(n))?'–':'$'+Math.round(n).toLocaleString();
+const fPP=n=>(n==null||isNaN(n))?'–':(n>0?'+':'')+n.toFixed(1)+' pp';
+const num=v=>(v===''||v==null)?null:Number(v);
+const C={g:'#17825A',b:'#2F5D9E',y:'#B07D0E',r:'#B0472A'};
+let toastT;
+function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toastT);toastT=setTimeout(()=>t.style.display='none',2600)}
+const today=()=>new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+const addDays=d=>{const x=new Date();x.setDate(x.getDate()+d);return x.toISOString().slice(0,10)};
+
+/* ============ Sample data & state ============ */
+function sample(){return{
+ settings:{inst:'Sample HBCU (illustrative data)',prepared:'Office of Institutional Research',email:'zaid.zaidansari@gmail.com',phone:'',web:'',
+   peerRet:66,peerGrad:36,natRet:75,natGrad:64,tuition:9000,sample:true},
+ cohorts:[
+  {id:'c1',year:2012,entering:612,ret:62,grad:31,pellGrad:28,nonPellGrad:38,pellShare:74,fg:52,unmet:7200},
+  {id:'c2',year:2013,entering:640,ret:63,grad:32,pellGrad:29,nonPellGrad:38,pellShare:75,fg:53,unmet:7350},
+  {id:'c3',year:2014,entering:598,ret:64,grad:33,pellGrad:30,nonPellGrad:39,pellShare:76,fg:54,unmet:7500},
+  {id:'c4',year:2015,entering:655,ret:63,grad:34,pellGrad:30,nonPellGrad:40,pellShare:77,fg:55,unmet:7800},
+  {id:'c5',year:2016,entering:671,ret:65,grad:35,pellGrad:31,nonPellGrad:41,pellShare:78,fg:55,unmet:8000},
+  {id:'c6',year:2017,entering:690,ret:66,grad:36,pellGrad:32,nonPellGrad:42,pellShare:78,fg:56,unmet:8200},
+  {id:'c7',year:2018,entering:702,ret:68,grad:37,pellGrad:34,nonPellGrad:42,pellShare:79,fg:57,unmet:8300},
+  {id:'c8',year:2019,entering:684,ret:69,grad:38,pellGrad:35,nonPellGrad:43,pellShare:80,fg:58,unmet:8500}],
+ aid:[
+  {id:'a1',year:2020,enrolled:2400,pell:1420,unmet:7900,grants:90000},
+  {id:'a2',year:2021,enrolled:2450,pell:1470,unmet:8100,grants:110000},
+  {id:'a3',year:2022,enrolled:2500,pell:1520,unmet:8300,grants:140000},
+  {id:'a4',year:2023,enrolled:2520,pell:1550,unmet:8450,grants:160000},
+  {id:'a5',year:2024,enrolled:2560,pell:1600,unmet:8600,grants:185000}],
+ community:[
+  {id:'m1',program:'Congregation tutoring partnership',partner:'Local faith coalition',participants:140,hours:1200},
+  {id:'m2',program:'Alumni mentoring network',partner:'National alumni association',participants:85,hours:640},
+  {id:'m3',program:'K-12 college-access days',partner:'County school district',participants:320,hours:900},
+  {id:'m4',program:'Small-business clinic',partner:'Chamber of Commerce',participants:60,hours:420},
+  {id:'m5',program:'Community health screening',partner:'City health department',participants:410,hours:300}],
+ students:[
+  {id:'S-1001',gpa:3.6,credit:98,unmet:2500,fg:'No',visits:3},{id:'S-1002',gpa:2.1,credit:64,unmet:8800,fg:'Yes',visits:0},
+  {id:'S-1003',gpa:2.9,credit:85,unmet:6200,fg:'Yes',visits:1},{id:'S-1004',gpa:3.2,credit:92,unmet:4300,fg:'No',visits:2},
+  {id:'S-1005',gpa:1.8,credit:55,unmet:9400,fg:'Yes',visits:0},{id:'S-1006',gpa:2.5,credit:78,unmet:7100,fg:'Yes',visits:1},
+  {id:'S-1007',gpa:3.9,credit:100,unmet:1500,fg:'No',visits:4},{id:'S-1008',gpa:2.3,credit:70,unmet:8200,fg:'No',visits:0},
+  {id:'S-1009',gpa:3.0,credit:88,unmet:5600,fg:'Yes',visits:2},{id:'S-1010',gpa:2.7,credit:80,unmet:7600,fg:'Yes',visits:0},
+  {id:'S-1011',gpa:3.4,credit:95,unmet:3900,fg:'No',visits:1},{id:'S-1012',gpa:2.0,credit:60,unmet:9000,fg:'Yes',visits:1}],
+ actions:[
+  {id:'t1',title:'Launch early-alert system for first-year students',owner:'Provost / Student Success',due:addDays(60),status:'In progress',metric:'First-year retention (%)',baseline:69,target:73,current:70},
+  {id:'t2',title:'Emergency micro-grant fund for Pell students',owner:'Financial Aid',due:addDays(90),status:'Planned',metric:'Pell 6-yr graduation (%)',baseline:35,target:39,current:35},
+  {id:'t3',title:'IPEDS data-quality sign-off protocol',owner:'Institutional Research',due:addDays(30),status:'Done',metric:'Submission errors (count)',baseline:12,target:2,current:2}],
+ comp:[
+  {id:'k1',component:'Institutional Characteristics (IC)',window:'Fall',owner:'Registrar',status:'Submitted',notes:''},
+  {id:'k2',component:'Completions (C)',window:'Fall',owner:'Registrar',status:'Validated',notes:'Awaiting CIP code check'},
+  {id:'k3',component:'12-Month Enrollment (E12)',window:'Fall',owner:'Institutional Research',status:'In progress',notes:''},
+  {id:'k4',component:'Student Financial Aid (SFA)',window:'Winter',owner:'Financial Aid',status:'Not started',notes:''},
+  {id:'k5',component:'Graduation Rates (GR)',window:'Winter',owner:'Institutional Research',status:'Not started',notes:''},
+  {id:'k6',component:'Admissions (ADM)',window:'Winter',owner:'Admissions',status:'Not started',notes:''},
+  {id:'k7',component:'Fall Enrollment (EF)',window:'Spring',owner:'Institutional Research',status:'Not started',notes:''},
+  {id:'k8',component:'Outcome Measures (OM)',window:'Spring',owner:'Institutional Research',status:'Not started',notes:''},
+  {id:'k9',component:'Finance (F)',window:'Spring',owner:'Business Office',status:'Not started',notes:''},
+  {id:'k10',component:'Human Resources (HR)',window:'Spring',owner:'Human Resources',status:'Not started',notes:''}],
+ plan:[
+  {id:'p1',objective:'Raise first-year retention to the national benchmark',kpi:'Fall-to-fall retention',theme:'Student achievement',owner:'Provost',status:'In progress'},
+  {id:'p2',objective:'Close the Pell / non-Pell graduation gap',kpi:'Pell 6-yr graduation rate',theme:'Student achievement',owner:'Financial Aid / Student Affairs',status:'Planned'},
+  {id:'p3',objective:'Embed data review in annual assessment cycle',kpi:'Units submitting assessment reports',theme:'Institutional effectiveness',owner:'Institutional Research',status:'In progress'}],
+ weights:{gpa:1.6,credit:2.2,unmet:0.9,fg:0.35,adv:0.25,bias:-1.2},
+ scn:{dRet:5,dGrad:5,persist:3,cost:150000}
+}}
+const KEY='bmpa_hbcu_outcomes_navigator_v1';
+let S;
+function load(){const d=sample();try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);Object.keys(d).forEach(k=>{if(p[k]!==undefined)d[k]=(k==='settings'||k==='weights'||k==='scn')?Object.assign(d[k],p[k]):p[k]})}}catch(e){}return d}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function commit(){save();refresh()}
+
+/* ============ Dialogs ============ */
+const dlg=$('#dlg');
+$('#dlgForm').addEventListener('submit',e=>e.preventDefault());
+function openDlg(title,body,buttons){
+  $('#dlgTitle').textContent=title;$('#dlgBody').innerHTML=body;
+  const f=$('#dlgFoot');f.innerHTML='';
+  buttons.forEach(b=>{const el=document.createElement('button');el.type='button';el.className='btn '+(b.cls||'');el.textContent=b.label;
+    el.onclick=()=>{const r=b.fn?b.fn():undefined;if(r!==false)dlg.close()};f.appendChild(el)});
+  if(!dlg.open)dlg.showModal();
+}
+function ask(msg,okLabel='Confirm',danger=true){return new Promise(res=>{
+  let done=false;const fin=v=>{if(!done){done=true;res(v)}};
+  dlg.addEventListener('close',()=>fin(false),{once:true});
+  openDlg('Please confirm','<p>'+esc(msg)+'</p>',[{label:'Cancel',cls:'ghost',fn:()=>{fin(false)}},{label:okLabel,cls:danger?'danger':'',fn:()=>{fin(true)}}]);
+})}
+
+/* ============ Generic CRUD table ============ */
+function csvOut(name,cols,rows){
+  const cs=cols.filter(c=>!c.computed);
+  const q=v=>{v=v==null?'':String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+  const t=cs.map(c=>c.k).join(',')+'\n'+rows.map(r=>cs.map(c=>q(r[c.k])).join(',')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv'}));a.download=name+'.csv';document.body.appendChild(a);a.click();a.remove();
+}
+function parseCSV(t){
+  const rows=[];let row=[],cur='',q=false;
+  for(let i=0;i<t.length;i++){const ch=t[i];
+    if(q){if(ch==='"'&&t[i+1]==='"'){cur+='"';i++}else if(ch==='"')q=false;else cur+=ch}
+    else if(ch==='"')q=true;else if(ch===','){row.push(cur);cur=''}
+    else if(ch==='\n'||ch==='\r'){if(ch==='\r'&&t[i+1]==='\n')i++;row.push(cur);cur='';if(row.some(x=>x!==''))rows.push(row);row=[]}
+    else cur+=ch}
+  row.push(cur);if(row.some(x=>x!==''))rows.push(row);return rows;
+}
+function crud(host,o){
+  const rows=(o.sort?S[o.key].slice().sort(o.sort):S[o.key]);
+  const cols=o.cols;
+  const th=cols.map(c=>`<th class="${c.type==='number'?'num':''}">${esc(c.label)}</th>`).join('')+'<th style="width:130px">Actions</th>';
+  const body=rows.map(r=>'<tr>'+cols.map(c=>{
+    let v=c.computed?c.computed(r):(c.fmt?c.fmt(r[c.k],r):esc(r[c.k]));
+    return `<td class="${c.type==='number'?'num':''}">${v}</td>`}).join('')+
+    `<td><button class="btn sm ghost" data-a="edit" data-id="${esc(r.id)}">Edit</button> <button class="btn sm danger" data-a="del" data-id="${esc(r.id)}">Remove</button></td></tr>`).join('');
+  host.innerHTML=`<div class="tools">
+    <button class="btn sm" data-a="add">+ Add ${esc(o.noun)}</button>
+    <button class="btn sm ghost" data-a="restore">Restore sample data</button>
+    <button class="btn sm danger" data-a="clear">Clear all ${esc(o.noun)} data</button>
+    <button class="btn sm ghost" data-a="csv">Export CSV</button>
+    ${o.imp?'<button class="btn sm ghost" data-a="imp">Import CSV</button><input type="file" accept=".csv,text/csv" hidden>':''}
+    <span class="mini">${rows.length} record(s)</span></div>
+    <div class="tw"><table><thead><tr>${th}</tr></thead><tbody>${body||`<tr><td colspan="${cols.length+1}" class="mini" style="padding:18px">No ${esc(o.noun)} records yet — click “Add” to enter your own, or “Restore sample data”.</td></tr>`}</tbody></table></div>`;
+  host.onclick=async e=>{
+    const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,id=b.dataset.id;
+    if(a==='add')return form(null);
+    if(a==='edit')return form(S[o.key].find(x=>x.id===id));
+    if(a==='del'){if(await ask('Remove this '+o.noun+' record? This cannot be undone.','Remove')){S[o.key]=S[o.key].filter(x=>x.id!==id);S.settings.sample=false;commit();toast('Record removed')}return}
+    if(a==='clear'){if(await ask('Delete ALL '+o.noun+' records? Charts and reports that use them will become empty.','Clear all')){S[o.key]=[];S.settings.sample=false;commit();toast('All '+o.noun+' data cleared')}return}
+    if(a==='restore'){if(await ask('Replace the current '+o.noun+' records with the illustrative sample data?','Restore sample',false)){S[o.key]=sample()[o.key];commit();toast('Sample data restored')}return}
+    if(a==='csv')return csvOut(o.key,cols,S[o.key]);
+    if(a==='imp'){const f=host.querySelector('input[type=file]');f.onchange=()=>{const file=f.files[0];if(!file)return;const rd=new FileReader();rd.onload=()=>doImport(String(rd.result));rd.readAsText(file)};f.click()}
+  };
+  function doImport(text){
+    const t=parseCSV(text);if(t.length<2)return toast('CSV has no data rows');
+    const h=t[0].map(x=>x.trim());const fields=cols.filter(c=>!c.computed);
+    if(!fields.some(c=>h.includes(c.k)))return toast('CSV headers do not match. Export CSV first to see the expected columns.');
+    const out=t.slice(1).map(r=>{const o2={id:uid()};fields.forEach(c=>{const i=h.indexOf(c.k);let v=i>=0?r[i]:'';o2[c.k]=c.type==='number'?num(v):v});return o2});
+    S[o.key]=S[o.key].concat(out);S.settings.sample=false;commit();toast(out.length+' record(s) imported');
+  }
+  function form(rec){
+    const fields=cols.filter(c=>!c.computed);
+    const body=`<div class="row">`+fields.map(c=>{
+      const v=rec?rec[c.k]:(c.def!==undefined?c.def:'');
+      let inp;
+      if(c.type==='select')inp=`<select name="${c.k}">${c.opts.map(x=>`<option ${x===v?'selected':''}>${esc(x)}</option>`).join('')}</select>`;
+      else if(c.type==='textarea')inp=`<textarea name="${c.k}" rows="2">${esc(v)}</textarea>`;
+      else inp=`<input name="${c.k}" type="${c.type==='number'?'number':c.type==='date'?'date':'text'}" ${c.min!=null?`min="${c.min}"`:''} ${c.max!=null?`max="${c.max}"`:''} step="${c.step||'any'}" value="${esc(v)}">`;
+      return `<div style="${c.wide?'grid-column:1/-1':''}"><label>${esc(c.label)}${c.req?' *':''}</label>${inp}</div>`}).join('')+`</div><div id="fe" class="note red" style="display:none"></div>`;
+    openDlg((rec?'Edit ':'Add ')+o.noun,body,[{label:'Cancel',cls:'ghost'},{label:'Save',fn:()=>{
+      const d={};let err='';
+      fields.forEach(c=>{const el=$('#dlgBody [name="'+c.k+'"]');let v=el.value.trim();
+        if(c.type==='number'){v=num(v);if(v!=null&&c.min!=null&&v<c.min)err=c.label+' must be ≥ '+c.min;if(v!=null&&c.max!=null&&v>c.max)err=c.label+' must be ≤ '+c.max}
+        if(c.req&&(v===''||v==null))err=c.label+' is required';d[c.k]=v});
+      if(err){const f=$('#fe');f.textContent=err;f.style.display='block';return false}
+      if(rec)Object.assign(rec,d);else{d.id=uid();S[o.key].push(d)}
+      S.settings.sample=false;commit();toast('Saved');
+    }}]);
+  }
+}
+
+/* ============ Charts (inline SVG, interactive) ============ */
+const CW=720,CH=300,ML=50,MB=34,MT=16;
+function niceStep(r){const e=Math.pow(10,Math.floor(Math.log10(r))),f=r/e;return(f<=1?1:f<=2?2:f<=2.5?2.5:f<=5?5:10)*e}
+function scaleY(spec,vals){
+  let lo=Math.min(...vals),hi=Math.max(...vals);
+  const pad=((hi-lo)||Math.abs(hi)||1)*.12;
+  if(spec.yMin!=null)lo=spec.yMin;else{lo=lo-pad;if(Math.min(...vals)>=0&&lo<0)lo=0}
+  if(spec.yMax!=null)hi=spec.yMax;else hi=hi+pad;
+  const st=niceStep((hi-lo)/5);lo=Math.floor(lo/st+1e-9)*st;hi=Math.ceil(hi/st-1e-9)*st;if(hi<=lo)hi=lo+st;
+  return[lo,hi,st];
+}
+function chartSVG(spec){
+  const all=[];spec.series.forEach(s=>s.vals.forEach(v=>{if(v!=null&&!isNaN(v))all.push(v)}));
+  if(!spec.labels.length||!all.length)return{html:'<div class="mini" style="padding:40px;text-align:center">No data to chart yet. Add records in the Data Workspace or restore the sample data.</div>',empty:true};
+  const [lo,hi,stp]=scaleY(spec,spec.kind==='bar'?all.concat([0]):all);
+  const MR=spec.kind==='line'?118:16,pw=CW-ML-MR,ph=CH-MT-MB;
+  const Y=v=>MT+(1-(v-lo)/(hi-lo))*ph, n=spec.labels.length;
+  const fmt=spec.fmt||(v=>v);
+  let g='';
+  const nt=Math.round((hi-lo)/stp);for(let i=0;i<=nt;i++){const v=lo+stp*i,y=Y(v);g+=`<line class="gl" x1="${ML}" x2="${CW-MR}" y1="${y}" y2="${y}"/><text class="ax" x="${ML-8}" y="${y+4}" text-anchor="end">${esc(spec.axisFmt?spec.axisFmt(v):fmt(Math.round(v*100)/100))}</text>`}
+  let geom={W:CW,H:CH,ML,MR,lo,hi,Y,n,kind:spec.kind},body='';
+  if(spec.kind==='line'){
+    const X=i=>n===1?ML+pw/2:ML+i*pw/(n-1);geom.X=X;
+    const step=Math.max(1,Math.ceil(n/9));
+    spec.labels.forEach((l,i)=>{if(i%step===0||i===n-1)g+=`<text class="ax" x="${X(i)}" y="${CH-12}" text-anchor="middle">${esc(l)}</text>`});
+    const ends=[];
+    spec.series.forEach(s=>{
+      let d='',pen=false,lastI=-1;
+      s.vals.forEach((v,i)=>{if(v==null||isNaN(v)){pen=false;return}d+=(pen?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1);pen=true;lastI=i});
+      body+=`<path d="${d}" fill="none" stroke="${s.color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" ${s.dash?'stroke-dasharray="7 5"':''}/>`;
+      if(!s.dash||n<=12)s.vals.forEach((v,i)=>{if(v!=null&&!isNaN(v)&&!s.dash)body+=`<circle cx="${X(i)}" cy="${Y(v)}" r="4" fill="${s.color}" stroke="#fff" stroke-width="2"/>`});
+      if(lastI>=0)ends.push({y:Y(s.vals[lastI]),name:s.name,color:s.color,x:X(lastI)});
+    });
+    ends.sort((a,b)=>a.y-b.y);for(let i=1;i<ends.length;i++)if(ends[i].y-ends[i-1].y<14)ends[i].y=ends[i-1].y+14;
+    ends.forEach(e=>{body+=`<circle cx="${e.x+10}" cy="${e.y}" r="4" fill="${e.color}"/><text x="${e.x+19}" y="${e.y+4}" font-size="11.5" font-family="system-ui" fill="#1D2A24">${esc(e.name)}</text>`});
+    body+=`<line class="cross" y1="${MT}" y2="${CH-MB}" stroke="#7A877F" stroke-width="1" stroke-dasharray="3 3" style="display:none"/>`;
+    spec.series.forEach((s,si)=>body+=`<circle class="hd" data-s="${si}" r="6" fill="${s.color}" stroke="#fff" stroke-width="2.5" style="display:none"/>`);
+  }else{
+    const gw=pw/n,k=spec.series.length,area=gw*.72,bw=Math.min(54,(area-(k-1)*3)/k),y0=Y(Math.max(lo,Math.min(0,hi)));
+    geom.gw=gw;
+    spec.labels.forEach((l,i)=>{const cx=ML+gw*i+gw/2;g+=`<text class="ax" x="${cx}" y="${CH-12}" text-anchor="middle">${esc(String(l).length>24?String(l).slice(0,23)+'…':l)}</text>`;
+      spec.series.forEach((s,si)=>{const v=s.vals[i];if(v==null||isNaN(v))return;
+        const x=cx-(k*bw+(k-1)*3)/2+si*(bw+3),yv=Y(v),top=Math.min(y0,yv),h=Math.max(1,Math.abs(y0-yv));
+        body+=`<rect data-i="${i}" data-s="${si}" x="${x.toFixed(1)}" y="${top.toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="3" fill="${s.color}"/>`;
+        if(k===1&&n<=10)body+=`<text x="${x+bw/2}" y="${(v>=0?top-5:top+h+12)}" text-anchor="middle" font-size="11.5" font-family="system-ui" font-weight="600" fill="#1D2A24">${esc(fmt(v))}</text>`})});
+    body+=`<line x1="${ML}" x2="${CW-MR}" y1="${y0}" y2="${y0}" stroke="#7A877F" stroke-width="1"/>`;
+  }
+  const svg=`<svg viewBox="0 0 ${CW} ${CH}" role="img" aria-label="${esc(spec.title)}">${g}${body}</svg>`;
+  return{html:svg,geom,fmt,spec};
+}
+function attachChart(plot,res){
+  if(res.empty)return;
+  const svg=plot.querySelector('svg'),tip=plot.querySelector('.tip'),{geom,spec,fmt}=res;
+  const show=(html,x,y)=>{tip.innerHTML=html;tip.style.display='block';const pr=plot.getBoundingClientRect();let l=x+14;if(l+tip.offsetWidth>pr.width-4)l=x-tip.offsetWidth-14;tip.style.left=Math.max(4,l)+'px';tip.style.top=Math.max(4,y)+'px'};
+  if(geom.kind==='line'){
+    const cross=svg.querySelector('.cross'),hds=$$('.hd',svg);
+    const move=e=>{const pt=e.touches?e.touches[0]:e,r=svg.getBoundingClientRect(),vx=(pt.clientX-r.left)*geom.W/r.width;
+      const pw=geom.W-geom.ML-geom.MR;let i=geom.n===1?0:Math.round((vx-geom.ML)/(pw/(geom.n-1)));i=Math.max(0,Math.min(geom.n-1,i));
+      const x=geom.X(i);cross.setAttribute('x1',x);cross.setAttribute('x2',x);cross.style.display='';
+      let rows='';spec.series.forEach((s,si)=>{const v=s.vals[i],h=hds[si];if(v==null||isNaN(v)){h.style.display='none';return}
+        h.setAttribute('cx',x);h.setAttribute('cy',geom.Y(v));h.style.display='';
+        rows+=`<div><span class="sw" style="background:${s.color}"></span>${esc(s.name)}: <b style="display:inline">${esc(fmt(v))}</b></div>`});
+      show(`<b>${esc(spec.labels[i])}</b>${rows}`,x/geom.W*r.width,8)};
+    const out=()=>{cross.style.display='none';hds.forEach(h=>h.style.display='none');tip.style.display='none'};
+    svg.addEventListener('mousemove',move);svg.addEventListener('touchmove',move,{passive:true});svg.addEventListener('touchstart',move,{passive:true});svg.addEventListener('mouseleave',out);
+  }else{
+    svg.addEventListener('mousemove',e=>{const t=e.target.closest('rect[data-i]');if(!t){tip.style.display='none';return}
+      $$('rect[data-i]',svg).forEach(r=>r.style.opacity=r===t?1:.6);
+      const i=+t.dataset.i,s=spec.series[+t.dataset.s],pr=plot.getBoundingClientRect();
+      show(`<b>${esc(spec.labels[i])}</b><div><span class="sw" style="background:${s.color}"></span>${esc(s.name)}: <b style="display:inline">${esc(fmt(s.vals[i]))}</b></div>`,e.clientX-pr.left,e.clientY-pr.top-10)});
+    svg.addEventListener('mouseleave',()=>{tip.style.display='none';$$('rect[data-i]',svg).forEach(r=>r.style.opacity=1)});
+  }
+}
+function legendHTML(spec){return spec.series.length>1?'<div class="legend">'+spec.series.map(s=>`<span><i class="${s.dash?'dash':''}" style="background:${s.dash?'transparent':s.color};border-color:${s.color}"></i>${esc(s.name)}</span>`).join('')+'</div>':''}
+function tableHTML(spec){
+  const f=spec.fmt||(v=>v);
+  return `<div class="tw"><table><thead><tr><th>${esc(spec.xName||'Category')}</th>${spec.series.map(s=>`<th class="num">${esc(s.name)}</th>`).join('')}</tr></thead><tbody>${spec.labels.map((l,i)=>`<tr><td>${esc(l)}</td>${spec.series.map(s=>`<td class="num">${s.vals[i]==null?'–':esc(f(s.vals[i]))}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+}
+function mountChart(host,spec){
+  host.classList.add('card','chart-card');
+  host.innerHTML=`<div class="chart-head"><div><h3>${esc(spec.title)}</h3><div class="chart-sub">${esc(spec.sub||'')}</div></div><button class="btn sm ghost" type="button" aria-pressed="false">View table</button></div>${legendHTML(spec)}<div class="plot"></div><div class="dtable"></div>${spec.note?`<div class="mini" style="margin-top:6px">${spec.note}</div>`:''}`;
+  const plot=$('.plot',host),res=chartSVG(spec);plot.innerHTML=res.html+'<div class="tip"></div>';attachChart(plot,res);
+  const dt=$('.dtable',host),btn=$('button',host);dt.innerHTML=tableHTML(spec);
+  btn.onclick=()=>{const on=btn.getAttribute('aria-pressed')==='false';btn.setAttribute('aria-pressed',on);btn.textContent=on?'View chart':'View table';plot.style.display=on?'none':'';dt.style.display=on?'block':'none'};
+}
+function reportChart(spec){const r=chartSVG(spec);return `<div class="avoid"><b>${esc(spec.title)}</b><div class="mini">${esc(spec.sub||'')}</div>${legendHTML(spec)}${r.html}</div>`}
+</script>
+<script>
+/* ============ Derived data ============ */
+const sortedC=()=>S.cohorts.filter(c=>c.year!=null).slice().sort((a,b)=>a.year-b.year);
+const latest=()=>{const c=sortedC();return c[c.length-1]};
+const kpi=(l,v,d)=>`<div class="card kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="d">${d}</div></div>`;
+const badge=(cls,t)=>`<span class="badge ${cls}">${t}</span>`;
+const toneIcon={good:'✓',warn:'●',bad:'▲'};
+const mailto=(sub,body)=>'mailto:'+encodeURIComponent(S.settings.email||'')+'?subject='+encodeURIComponent(sub)+(body?'&body='+encodeURIComponent(body):'');
+
+function insights(){
+  const c=sortedC(),L=c[c.length-1],F=c[0],st=S.settings,out=[];
+  if(!L)return out;
+  if(c.length>1&&L.ret!=null&&F.ret!=null){const d=L.ret-F.ret;out.push({t:d>=0?'good':'bad',area:'Retention trend',text:`First-year retention moved ${fPP(d)} from the ${F.year} cohort (${fP(F.ret)}) to the ${L.year} cohort (${fP(L.ret)}).`})}
+  if(L.ret!=null){const dn=L.ret-st.natRet,dp=L.ret-st.peerRet;out.push({t:dn>=0?'good':(dn>-5?'warn':'bad'),area:'Retention benchmark',text:`Latest retention is ${fPP(dn)} against the national benchmark (${fP(st.natRet)}) and ${fPP(dp)} against peer HBCUs (${fP(st.peerRet)}).`})}
+  if(L.grad!=null){const dn=L.grad-st.natGrad,dp=L.grad-st.peerGrad;out.push({t:dp>=0?'good':(dp>-5?'warn':'bad'),area:'Graduation benchmark',text:`The ${L.year} cohort’s 6-year graduation rate is ${fPP(dp)} against peer HBCUs (${fP(st.peerGrad)}) and ${fPP(dn)} against the national benchmark (${fP(st.natGrad)}).`})}
+  if(L.pellGrad!=null&&L.nonPellGrad!=null){const gap=L.nonPellGrad-L.pellGrad;let tr='';
+    if(F&&F!==L&&F.pellGrad!=null&&F.nonPellGrad!=null){const g0=F.nonPellGrad-F.pellGrad;tr=` (it was ${g0.toFixed(1)} pp for the ${F.year} cohort)`}
+    out.push({t:gap<=4?'good':(gap<=8?'warn':'bad'),area:'Equity gap',text:`Pell recipients graduate ${gap.toFixed(1)} pp below non-Pell students${tr}.`})}
+  if(L.fg!=null&&L.unmet!=null)out.push({t:L.unmet>=7000?'warn':'good',area:'Access & affordability',text:`${fP(L.fg)} of the entering class are first-generation and average unmet need is ${fM(L.unmet)} — the profile that early-alert and aid-optimization work targets most directly.`});
+  return out;
+}
+function scnCalc(p){p=p||S.scn;const L=latest(),N=L?L.entering:0,ret=L&&L.ret!=null?L.ret:0,grad=L&&L.grad!=null?L.grad:0,tu=+S.settings.tuition||0;
+  const ys=[1,2,3,4,5];let rev=0;ys.forEach(y=>{rev+=N*(p.dRet*y/5)/100*tu*p.persist});
+  const cost=p.cost*5;
+  return{N,ret,grad,addRet:N*p.dRet/100,addGrad:N*p.dGrad/100,rev,cost,roi:cost>0?(rev-cost)/cost*100:null,path:ys.map(y=>ret+p.dRet*y/5),base:ys.map(()=>ret)}}
+
+/* chart specs shared by screens and reports */
+const pctF=v=>Number(v).toFixed(1)+'%',axP=v=>Math.round(v)+'%';
+function specBench(metric,from,to){
+  const c=sortedC().filter(x=>(from==null||x.year>=from)&&(to==null||x.year<=to)),r=metric==='ret',st=S.settings;
+  return{kind:'line',title:r?'First-year retention vs. benchmarks':'6-year graduation rate vs. benchmarks',sub:'Entering cohort year · dashed lines are your editable benchmark values',xName:'Cohort',labels:c.map(x=>String(x.year)),fmt:pctF,axisFmt:axP,
+    series:[{name:'Your institution',color:C.g,vals:c.map(x=>r?x.ret:x.grad)},{name:'Peer HBCUs',color:C.b,dash:1,vals:c.map(()=>r?st.peerRet:st.peerGrad)},{name:'National',color:C.y,dash:1,vals:c.map(()=>r?st.natRet:st.natGrad)}]}}
+function specEquity(){const c=sortedC();return{kind:'line',title:'Equity lens: 6-year graduation, Pell vs. non-Pell',sub:'The gap between the lines is the equity gap to close',xName:'Cohort',labels:c.map(x=>String(x.year)),fmt:pctF,axisFmt:axP,
+  series:[{name:'Non-Pell',color:C.b,vals:c.map(x=>x.nonPellGrad)},{name:'Pell recipients',color:C.g,vals:c.map(x=>x.pellGrad)}]}}
+function specGap(){const L=latest(),st=S.settings;return{kind:'bar',signed:1,title:'Gap to benchmarks (latest cohort)',sub:L?`${L.year} cohort · percentage points above (+) or below (−) each benchmark`:'',labels:['First-year retention','6-year graduation'],fmt:fPP,axisFmt:v=>Math.round(v)+' pp',xName:'Metric',
+  series:L?[{name:'vs. Peer HBCUs',color:C.b,vals:[L.ret-st.peerRet,L.grad-st.peerGrad]},{name:'vs. National',color:C.y,vals:[L.ret-st.natRet,L.grad-st.natGrad]}]:[{name:'vs. Peer HBCUs',color:C.b,vals:[]}]}}
+function specFunnel(){const L=latest();return{kind:'bar',title:'Cohort funnel (latest cohort)',sub:L?`${L.year} entering cohort: where students are lost`:'',labels:L?['Entered','Returned for year 2','Graduated within 6 yrs']:[],fmt:fN,yMin:0,xName:'Stage',
+  series:[{name:'Students',color:C.g,vals:L?[L.entering,L.entering*L.ret/100,L.entering*L.grad/100]:[]}]}}
+function specDemo(){const c=sortedC();return{kind:'line',title:'Who we serve: Pell and first-generation share',sub:'Share of the entering cohort',xName:'Cohort',labels:c.map(x=>String(x.year)),fmt:pctF,axisFmt:axP,
+  series:[{name:'Pell share',color:C.g,vals:c.map(x=>x.pellShare)},{name:'First-gen share',color:C.b,vals:c.map(x=>x.fg)}]}}
+function specSize(){const c=sortedC();return{kind:'bar',title:'Entering cohort size',sub:'First-time, full-time students',xName:'Cohort',labels:c.map(x=>String(x.year)),fmt:fN,yMin:0,series:[{name:'Entering students',color:C.b,vals:c.map(x=>x.entering)}]}}
+
+/* ============ OVERVIEW ============ */
+function vOverview(){
+  const L=latest(),F=sortedC()[0],st=S.settings,ins=insights(),sc=scnCalc();
+  $('#v-overview').innerHTML=`
+  <div class="hero">
+    <span class="pill">IPEDS-ready</span><span class="pill">Equity-focused</span><span class="pill">Action-driven</span><span class="pill">HBCU mission-centered</span>
+    <h1>Turn compliance data into <span class="gold">student-success outcomes</span>.</h1>
+    <p>Most institutions collect extensive data for IPEDS, accreditation and internal assessment — yet struggle to turn it into interventions that lift retention and graduation. The HBCU Outcomes Navigator links every data point to a decision, an owner, and a measurable result.</p>
+    <p style="font-style:italic;opacity:.9">“We turn static compliance reports into targeted, data-driven strategies for improving student retention, closing equity gaps, and enhancing institutional effectiveness — particularly for HBCUs seeking to amplify their impact.”</p>
+    <button class="btn gold" data-go="data">Start with your data</button> <button class="btn ghost" style="color:#fff;border-color:#fff" data-go="about">Meet the consultant behind it</button>
+  </div>
+  ${st.sample?'<div class="sample-banner"><b>Illustrative sample data is showing.</b> Replace it in the <a href="#" data-go="data">Data Workspace</a>, or remove it with “Clear all” — every table has Edit, Remove and Clear tools.</div>':''}
+  <div class="grid g4" id="ovK">
+    ${L?kpi('Latest first-year retention',fP(L.ret),F&&F!==L&&F.ret!=null?`<span class="${L.ret>=F.ret?'up':'dn'}">${fPP(L.ret-F.ret)}</span> since ${F.year}`:L.year+' cohort')
+      +kpi('6-year graduation rate',fP(L.grad),`${fPP(L.grad-st.peerGrad)} vs. peer HBCUs`)
+      +kpi('Pell equity gap',(L.nonPellGrad!=null&&L.pellGrad!=null?(L.nonPellGrad-L.pellGrad).toFixed(1)+' pp':'–'),'Non-Pell minus Pell graduation rate')
+      +kpi('Gap to national retention',fPP(L.ret-st.natRet),`National benchmark ${fP(st.natRet)}`)
+      :'<div class="card" style="grid-column:1/-1">No cohort data yet. Add records in the <a href="#" data-go="data">Data Workspace</a> to light up your outcomes scorecard.</div>'}
+  </div>
+  <div class="grid g2">
+    <div id="ovChart"></div>
+    <div class="card"><h3>What the data is telling you</h3>
+      ${ins.length?'<ul style="padding-left:0;list-style:none;margin:0">'+ins.map(i=>`<li style="margin:0 0 10px;display:flex;gap:8px">${badge(i.t==='good'?'b-good':i.t==='warn'?'b-warn':'b-bad',toneIcon[i.t]+' '+esc(i.area))}<span>${esc(i.text)}</span></li>`).join('')+'</ul>':'<p class="mini">Insights appear automatically when cohort data is present.</p>'}
+      <button class="btn sm" data-go="actions">Turn these into an action plan</button>
+    </div>
+  </div>
+  <div class="card tint"><h3>The business case, made interactive</h3>
+    <p>Drag the slider: how much is a small lift in first-year retention worth? Uses your latest cohort size (${fN(sc.N)}), your net tuition per student (${fM(S.settings.tuition)}) and the persistence assumption in the <a href="#" data-go="scenario">Scenario Planner</a>.</p>
+    <div class="row" style="align-items:end"><div><label>Retention improvement: <b id="ovDv">${S.scn.dRet.toFixed(1)}</b> percentage points</label><input type="range" id="ovD" min="0" max="15" step="0.5" value="${S.scn.dRet}" aria-label="Retention improvement in percentage points"></div>
+      <div id="ovOut"></div></div>
+    <div id="ovBar" style="margin-top:10px"></div>
+  </div>
+  <div class="card"><h3>From compliance to outcomes in four moves</h3>
+    <div class="pipeline">
+      <div class="st"><b>1 · Import &amp; validate</b>Bring IPEDS-aligned cohort data in, run integrity checks, and fix anomalies before they reach a submission.<br><button class="btn sm ghost" data-go="data" style="margin-top:8px">Data Workspace</button></div>
+      <div class="st"><b>2 · See the gaps</b>Interactive dashboards benchmark you against peer HBCUs and national norms, with an equity lens.<br><button class="btn sm ghost" data-go="dash" style="margin-top:8px">Dashboard</button></div>
+      <div class="st"><b>3 · Act</b>Early-alert scoring, a rule-based action-plan generator and task tracking assign owners to interventions.<br><button class="btn sm ghost" data-go="alert" style="margin-top:8px">Early Alert</button></div>
+      <div class="st"><b>4 · Prove</b>Scenario ROI, leadership briefings and branded PDF reports demonstrate impact to boards and accreditors.<br><button class="btn sm ghost" data-go="reports" style="margin-top:8px">PDF Reports</button></div>
+    </div></div>
+  <div class="card" style="border:2px solid var(--goldl)"><div class="prof">
+    <div class="avatar" aria-hidden="true">ZA</div>
+    <div><span class="pill dk">Your unique advantage</span>
+      <h2>Not just another software vendor — a seasoned institutional-research leader with a proven roadmap.</h2>
+      <p>This platform is designed by <b>Professor Zaid Adib Ansari</b>, Founder &amp; Principal Consultant of The Balanced Middle Path Academy, LLC: 30+ years of international higher-education leadership, former Executive Director of Institutional Research at the American University in Cairo and Acting Campus Vice President at George Mason University UAE, with deep expertise in IPEDS-style reporting, statistics (SPSS), business intelligence and grant writing.</p>
+      <button class="btn" data-go="about">Read the full profile</button> <button class="btn gold" data-contact>Request a consultation</button></div>
+  </div></div>`;
+  mountChart($('#ovChart'),specBench('ret'));
+  const upd=()=>{const d=+$('#ovD').value;S.scn.dRet=d;save();$('#ovDv').textContent=d.toFixed(1);const s=scnCalc();
+    $('#ovOut').innerHTML=`<div class="mini">Additional students retained each year</div><b style="font:700 1.8rem Amiri,serif;color:var(--green)">${fN(s.addRet)}</b> <span class="mini">· 5-year net tuition retained</span> <b style="font:700 1.8rem Amiri,serif;color:var(--green)">${fM(s.rev)}</b>`;
+    const host=$('#ovBar');const spec={kind:'bar',title:'Cumulative net tuition retained by year of the initiative',sub:'Assumes the improvement phases in evenly over five years',xName:'Year',labels:['Year 1','Year 2','Year 3','Year 4','Year 5'],fmt:fM,axisFmt:v=>'$'+Math.round(v/1000)+'k',yMin:0,
+      series:[{name:'Net tuition retained',color:C.g,vals:[1,2,3,4,5].map(y=>{let r=0;for(let k=1;k<=y;k++)r+=s.N*(d*k/5)/100*(+S.settings.tuition||0)*S.scn.persist;return r})}]};
+    mountChart(host,spec)};
+  $('#ovD').oninput=upd;upd();
+}
+
+/* ============ DATA WORKSPACE ============ */
+function validate(){
+  const c=sortedC(),out=[],seen={};
+  c.forEach(r=>{
+    if(seen[r.year])out.push({t:'bad',m:`Duplicate cohort year ${r.year}.`});seen[r.year]=1;
+    ['ret','grad','pellGrad','nonPellGrad','pellShare','fg'].forEach(k=>{if(r[k]!=null&&(r[k]<0||r[k]>100))out.push({t:'bad',m:`${r.year}: ${k} is outside 0–100.`})});
+    if(r.entering!=null&&r.entering<30)out.push({t:'warn',m:`${r.year}: entering cohort is very small (${r.entering}); rates may be unstable or suppressed.`});
+    if([r.ret,r.grad,r.pellGrad,r.nonPellGrad,r.pellShare,r.entering].some(v=>v==null))out.push({t:'warn',m:`${r.year}: one or more core fields are blank.`});
+    if(r.grad!=null&&r.pellGrad!=null&&r.nonPellGrad!=null&&r.pellShare!=null){const imp=r.pellShare/100*r.pellGrad+(1-r.pellShare/100)*r.nonPellGrad;if(Math.abs(imp-r.grad)>3)out.push({t:'warn',m:`${r.year}: reported 6-yr graduation (${r.grad}%) differs from the Pell-weighted rate (${imp.toFixed(1)}%) by more than 3 points — check Pell/non-Pell cohort definitions.`})}
+    if(r.pellGrad!=null&&r.nonPellGrad!=null&&r.grad!=null&&(r.grad<Math.min(r.pellGrad,r.nonPellGrad)-0.5||r.grad>Math.max(r.pellGrad,r.nonPellGrad)+0.5))out.push({t:'bad',m:`${r.year}: overall graduation rate falls outside the Pell / non-Pell range — mathematically inconsistent.`});
+  });
+  for(let i=1;i<c.length;i++){const a=c[i-1],b=c[i];if(a.ret!=null&&b.ret!=null&&Math.abs(b.ret-a.ret)>15)out.push({t:'warn',m:`Retention jumps ${(b.ret-a.ret).toFixed(1)} pp between ${a.year} and ${b.year} — verify the data or document the cause.`});
+    if(b.year-a.year>1)out.push({t:'warn',m:`Gap in cohort years between ${a.year} and ${b.year}.`})}
+  return out;
+}
+const cohortCols=[
+ {k:'year',label:'Cohort year',type:'number',req:1,min:1990,max:2100,step:1,def:new Date().getFullYear()-6},
+ {k:'entering',label:'Entering cohort (N)',type:'number',req:1,min:0,step:1,fmt:v=>fN(v)},
+ {k:'ret',label:'1st-yr retention %',type:'number',min:0,max:100,step:.1},
+ {k:'grad',label:'6-yr grad %',type:'number',min:0,max:100,step:.1},
+ {k:'pellGrad',label:'Pell 6-yr grad %',type:'number',min:0,max:100,step:.1},
+ {k:'nonPellGrad',label:'Non-Pell 6-yr grad %',type:'number',min:0,max:100,step:.1},
+ {k:'pellShare',label:'Pell share %',type:'number',min:0,max:100,step:.1},
+ {k:'fg',label:'First-gen share %',type:'number',min:0,max:100,step:.1},
+ {k:'unmet',label:'Avg unmet need $',type:'number',min:0,step:50,fmt:v=>fM(v)}];
+function vData(){
+  $('#v-data').innerHTML=`<h2>Data Workspace</h2>
+  <p>Enter, import, edit and remove entering-cohort outcomes. Everything on the dashboard, scenario planner, action generator and PDF reports reads from this table.</p>
+  <div class="card"><h3>Entering-cohort outcomes</h3><div id="cohortCrud"></div>
+    <div class="note">Tip: pull values from your IPEDS submissions or the IPEDS Data Center. Retention comes from the Fall Enrollment component; graduation rates from Graduation Rates (150% time) and Outcome Measures; Pell figures from Student Financial Aid and the Pell breakouts in GR/OM. Use Export CSV to get an import template.</div></div>
+  <div class="grid g2">
+    <div class="card"><h3>Data integrity checks</h3><div id="valOut"></div></div>
+    <div class="card"><h3>IPEDS field map (where each metric comes from)</h3><div class="tw"><table><thead><tr><th>Metric in this app</th><th>Typical IPEDS source</th></tr></thead><tbody>
+      <tr><td>Entering cohort (N)</td><td>Graduation Rates / Fall Enrollment cohort</td></tr>
+      <tr><td>First-year retention</td><td>Fall Enrollment (EF) — retention rates</td></tr>
+      <tr><td>6-year graduation (150% time)</td><td>Graduation Rates (GR); Outcome Measures (OM) for broader cohorts</td></tr>
+      <tr><td>Pell / non-Pell outcomes</td><td>GR &amp; OM Pell breakouts; Student Financial Aid (SFA)</td></tr>
+      <tr><td>Pell share, unmet need</td><td>Student Financial Aid (SFA) and internal aid records</td></tr></tbody></table></div>
+      <p class="mini" style="margin-top:8px">Always confirm definitions and submission windows against the current NCES IPEDS data-collection calendar and survey instructions.</p></div>
+  </div>`;
+  crud($('#cohortCrud'),{key:'cohorts',noun:'cohort',cols:cohortCols,sort:(a,b)=>a.year-b.year,imp:1});
+  const v=validate();
+  $('#valOut').innerHTML=v.length?'<ul style="list-style:none;padding:0;margin:0">'+v.map(x=>`<li style="margin-bottom:8px">${badge(x.t==='bad'?'b-bad':'b-warn',x.t==='bad'?'▲ Error':'● Check')} ${esc(x.m)}</li>`).join('')+'</ul>':(S.cohorts.length?badge('b-good','✓ All checks passed')+' <span class="mini">Ranges, duplicates, gaps, year-over-year jumps and Pell/non-Pell consistency look sound.</span>':'<span class="mini">Add cohort records to run integrity checks.</span>');
+}
+
+/* ============ DASHBOARD ============ */
+const DUI={metric:'ret',from:null,to:null};
+function vDash(){
+  const ys=sortedC().map(c=>c.year);
+  $('#v-dash').innerHTML=`<h2>Outcomes Dashboard</h2><p>Hover (or touch) any chart for exact values. Every chart has a table view for accessibility and audit.</p>
+  <div class="card"><div class="row">
+   <div><label for="dM">Outcome metric</label><select id="dM"><option value="ret">First-year retention</option><option value="grad">6-year graduation</option></select></div>
+   <div><label for="dF">From cohort</label><select id="dF">${ys.map(y=>`<option>${y}</option>`).join('')}</select></div>
+   <div><label for="dT">To cohort</label><select id="dT">${ys.map(y=>`<option>${y}</option>`).join('')}</select></div></div></div>
+  <div class="grid g2b"><div id="d1"></div><div id="d2"></div><div id="d3"></div><div id="d4"></div><div id="d5"></div><div id="d6"></div></div>
+  <div class="card tint"><h3>Read-out</h3><div id="d7"></div></div>`;
+  if(DUI.from==null||!ys.includes(DUI.from))DUI.from=ys[0];if(DUI.to==null||!ys.includes(DUI.to))DUI.to=ys[ys.length-1];
+  $('#dM').value=DUI.metric;$('#dF').value=DUI.from;$('#dT').value=DUI.to;
+  const draw=()=>{DUI.metric=$('#dM').value;DUI.from=+$('#dF').value;DUI.to=+$('#dT').value;
+    mountChart($('#d1'),specBench(DUI.metric,DUI.from,DUI.to));mountChart($('#d2'),specEquity());mountChart($('#d3'),specGap());
+    mountChart($('#d4'),specFunnel());mountChart($('#d5'),specDemo());mountChart($('#d6'),specSize());
+    const ins=insights();$('#d7').innerHTML=ins.length?'<ul style="margin:0;padding-left:18px">'+ins.map(i=>`<li>${esc(i.text)}</li>`).join('')+'</ul>':'<span class="mini">No data yet.</span>'};
+  ['dM','dF','dT'].forEach(i=>$('#'+i).onchange=draw);draw();
+}
+
+/* ============ EARLY ALERT ============ */
+const riskP=s=>{const w=S.weights;const z=w.bias+w.gpa*(2.5-s.gpa)+w.credit*(1-s.credit/100)*3+w.unmet*s.unmet/10000+(s.fg==='Yes'?w.fg:0)-w.adv*s.visits;return 1/(1+Math.exp(-z))};
+const bandOf=p=>p<.33?'Low':p<.6?'Moderate':'High';
+const bandBadge=b=>b==='High'?badge('b-bad','▲ High'):b==='Moderate'?badge('b-warn','● Moderate'):badge('b-good','✓ Low');
+const outreach={High:'Advisor outreach within 48 hours · financial-aid review · tutoring referral',Moderate:'Proactive check-in · gateway-course support · peer mentor match',Low:'Standard advising · celebrate momentum'};
+function vAlert(){
+  const W=[['gpa','GPA below 2.5 (more weight = more risk)',0,3],['credit','Credit-completion shortfall',0,4],['unmet','Unmet financial need (per $10k)',0,3],['fg','First-generation status',0,1.5],['adv','Advising visits (protective)',0,1],['bias','Baseline (intercept)',-3,1]];
+  $('#v-alert').innerHTML=`<h2>Early Alert &amp; Predictive Risk</h2>
+  <p>A transparent, adjustable risk score helps advisors reach students <i>before</i> they stop out. Each factor has a weight you can tune to your institution’s own evidence.</p>
+  <div class="note red"><b>Privacy first.</b> Use anonymous or pseudonymous IDs only. Data stays in this browser unless you export it. Follow FERPA and your institution’s data-governance policy before entering any student-level information.</div>
+  <div class="note"><b>Method note.</b> This is an illustrative logistic-style heuristic — not a validated prediction model. Calibrate weights against your own historical persistence data (or use the Premium-tier modelling service) before using it for decisions.</div>
+  <div class="grid g2"><div class="card"><h3>Risk-model weights</h3><div id="wBox"></div><button class="btn sm ghost" id="wReset">Reset weights</button></div><div id="alC"></div></div>
+  <div class="card"><h3>Student roster &amp; risk scores</h3><div id="alCrud"></div></div>`;
+  $('#wBox').innerHTML=W.map(([k,l,a,b])=>`<div style="margin-bottom:8px"><label for="w_${k}">${l}: <b id="wv_${k}">${S.weights[k].toFixed(2)}</b></label><input type="range" id="w_${k}" min="${a}" max="${b}" step="0.05" value="${S.weights[k]}"></div>`).join('');
+  const upd=()=>{
+    const rows=S.students.map(s=>({s,p:riskP(s)}));const cnt={Low:0,Moderate:0,High:0};rows.forEach(r=>cnt[bandOf(r.p)]++);
+    mountChart($('#alC'),{kind:'bar',title:'Students by risk band',sub:'Count of students on the roster',xName:'Band',labels:['Low','Moderate','High'],fmt:fN,yMin:0,series:[{name:'Students',color:C.b,vals:S.students.length?[cnt.Low,cnt.Moderate,cnt.High]:[]}]});
+    crud($('#alCrud'),{key:'students',noun:'student',sort:(a,b)=>riskP(b)-riskP(a),cols:[
+      {k:'id',label:'Student ID',type:'text',req:1,def:'S-'+(1000+S.students.length+1)},
+      {k:'gpa',label:'GPA',type:'number',req:1,min:0,max:4.5,step:.1},
+      {k:'credit',label:'Credits completed vs attempted %',type:'number',req:1,min:0,max:100,step:1},
+      {k:'unmet',label:'Unmet need $',type:'number',req:1,min:0,step:100,fmt:v=>fM(v)},
+      {k:'fg',label:'First-gen',type:'select',opts:['Yes','No']},
+      {k:'visits',label:'Advising visits',type:'number',req:1,min:0,step:1},
+      {k:'risk',label:'Risk score',type:'number',computed:s=>Math.round(riskP(s)*100)+'%'},
+      {k:'band',label:'Band',computed:s=>bandBadge(bandOf(riskP(s)))},
+      {k:'out',label:'Suggested outreach',computed:s=>`<span class="mini">${esc(outreach[bandOf(riskP(s))])}</span>`}]});
+  };
+  W.forEach(([k])=>$('#w_'+k).oninput=e=>{S.weights[k]=+e.target.value;$('#wv_'+k).textContent=S.weights[k].toFixed(2);save();upd()});
+  $('#wReset').onclick=()=>{S.weights=sample().weights;commit();toast('Weights reset')};
+  upd();
+}
+
+/* ============ SCENARIO ============ */
+function vScenario(){
+  const p=S.scn;
+  $('#v-scenario').innerHTML=`<h2>Scenario Planner — “what-if” for leadership</h2>
+  <p>Test how a change in retention or graduation could affect enrollment stability and revenue, then export the result to a board-ready PDF. All inputs are assumptions you control.</p>
+  <div class="grid g2"><div class="card"><h3>Assumptions</h3>
+    <div style="margin-bottom:10px"><label>Retention improvement at full effect: <b id="sv1">${p.dRet.toFixed(1)}</b> pp</label><input type="range" id="s1" min="0" max="15" step="0.5" value="${p.dRet}"></div>
+    <div style="margin-bottom:10px"><label>6-year graduation improvement: <b id="sv2">${p.dGrad.toFixed(1)}</b> pp</label><input type="range" id="s2" min="0" max="15" step="0.5" value="${p.dGrad}"></div>
+    <div style="margin-bottom:10px"><label>Additional years a retained student persists: <b id="sv3">${p.persist}</b></label><input type="range" id="s3" min="1" max="4" step="1" value="${p.persist}"></div>
+    <div class="row"><div><label for="s4">Annual program cost ($)</label><input type="number" id="s4" min="0" step="1000" value="${p.cost}"></div>
+    <div><label for="s5">Net tuition &amp; fees per student ($/yr)</label><input type="number" id="s5" min="0" step="100" value="${S.settings.tuition}"></div></div>
+    <div class="note">Baseline = your latest cohort. Improvement phases in evenly over five years. Revenue = additional retained students × net tuition × additional years. These are planning estimates, not forecasts.</div></div>
+    <div><div class="grid g2" id="sK" style="margin-bottom:0"></div></div></div>
+  <div class="grid g2"><div id="sC1"></div><div id="sC2"></div></div>`;
+  const upd=()=>{
+    p.dRet=+$('#s1').value;p.dGrad=+$('#s2').value;p.persist=+$('#s3').value;p.cost=+$('#s4').value||0;S.settings.tuition=+$('#s5').value||0;save();
+    $('#sv1').textContent=p.dRet.toFixed(1);$('#sv2').textContent=p.dGrad.toFixed(1);$('#sv3').textContent=p.persist;
+    const s=scnCalc();
+    $('#sK').innerHTML=kpi('Extra students retained / year',fN(s.addRet),`of ${fN(s.N)} entering`)+kpi('Extra graduates per cohort',fN(s.addGrad),'at full effect')+kpi('5-yr net tuition retained',fM(s.rev),'estimate')+kpi('5-yr program ROI',s.roi==null?'–':Math.round(s.roi)+'%',`Cost ${fM(s.cost)} over 5 yrs`);
+    mountChart($('#sC1'),{kind:'line',title:'Projected first-year retention path',sub:'Baseline vs. scenario, next five cohorts',xName:'Year',labels:['Today','Year 1','Year 2','Year 3','Year 4','Year 5'].slice(0,6),fmt:pctF,axisFmt:axP,
+      series:[{name:'Scenario',color:C.g,vals:[s.ret].concat(s.path)},{name:'Baseline',color:C.b,dash:1,vals:[s.ret].concat(s.base)}]});
+    mountChart($('#sC2'),{kind:'bar',title:'Students per entering cohort: baseline vs. scenario',sub:'Counts at full effect',xName:'Outcome',labels:['Retained to year 2','Graduated in 6 years'],fmt:fN,yMin:0,
+      series:[{name:'Baseline',color:C.b,vals:[s.N*s.ret/100,s.N*s.grad/100]},{name:'Scenario',color:C.g,vals:[s.N*(s.ret+p.dRet)/100,s.N*(s.grad+p.dGrad)/100]}]});
+  };
+  ['s1','s2','s3','s4','s5'].forEach(i=>$('#'+i).oninput=upd);upd();
+}
+
+/* ============ ACTION PLAN ============ */
+function recs(){
+  const L=latest(),st=S.settings,out=[];if(!L)return out;
+  const add=(pr,title,why,metric,base,target)=>out.push({pr,title,why,metric,base,target});
+  if(L.ret!=null&&L.ret<st.natRet-3)add(L.ret<st.natRet-8?'High':'Medium','Launch an early-alert and proactive advising system',`Retention (${fP(L.ret)}) trails the national benchmark by ${(st.natRet-L.ret).toFixed(1)} pp. Early-alert systems paired with advisor outreach are a widely used lever for persistence.`,'First-year retention (%)',L.ret,Math.min(st.natRet,L.ret+4));
+  if(L.nonPellGrad!=null&&L.pellGrad!=null&&L.nonPellGrad-L.pellGrad>=6)add(L.nonPellGrad-L.pellGrad>=10?'High':'Medium','Close the Pell gap: micro-grants and completion coaching',`Pell students graduate ${(L.nonPellGrad-L.pellGrad).toFixed(1)} pp below non-Pell peers. Small emergency grants and degree-completion coaching target stop-out risk driven by short-term financial shocks.`,'Pell 6-yr graduation (%)',L.pellGrad,L.pellGrad+4);
+  if(L.fg!=null&&L.fg>=45)add('Medium','First-generation success pathway: bridge program and peer mentoring',`${fP(L.fg)} of entering students are first-generation. Summer bridge, a first-year seminar and trained peer mentors help build the navigational know-how many first-generation students must learn on their own.`,'First-year retention (%)',L.ret,(L.ret||0)+3);
+  if(L.unmet!=null&&L.unmet>=6000)add(L.unmet>=8000?'High':'Medium','Financial-aid optimization sprint',`Average unmet need is ${fM(L.unmet)}. Audit FAFSA completion, verification bottlenecks, scholarship stacking and institutional-aid packaging to lower the gap.`,'Average unmet need ($)',L.unmet,Math.round(L.unmet*.9));
+  if(L.grad!=null&&L.grad<st.peerGrad)add('Medium','Degree-map and gateway-course redesign',`6-year graduation (${fP(L.grad)}) is below the peer benchmark (${fP(st.peerGrad)}). Review high-DFW gateway courses, clarify degree maps and tighten credit-transfer pathways.`,'6-yr graduation (%)',L.grad,Math.min(st.peerGrad,L.grad+3));
+  add('Medium','Activate alumni and Greek-letter organization mentoring partnerships','HBCU alumni networks and historically Black fraternities and sororities are powerful, mission-aligned sources of mentoring, internships and belonging. Formalize them into a tracked retention strategy.','Mentoring participants (count)',(S.community.find(x=>/mentor/i.test(x.program))||{}).participants||0,((S.community.find(x=>/mentor/i.test(x.program))||{}).participants||0)+50);
+  const notDone=S.comp.filter(x=>!['Validated','Submitted'].includes(x.status)).length;
+  if(S.comp.length&&notDone>S.comp.length/2)add('Medium','IPEDS data-quality calendar and sign-off protocol',`${notDone} of ${S.comp.length} IPEDS components are not yet validated. A shared calendar with owner sign-offs reduces late fixes and resubmissions.`,'Components validated (count)',S.comp.length-notDone,S.comp.length);
+  return out;
+}
+const stBadge=s=>s==='Done'?badge('b-good','✓ Done'):s==='In progress'?badge('b-warn','● In progress'):s==='Blocked'?badge('b-bad','▲ Blocked'):badge('b-mute','○ '+esc(s));
+function vActions(){
+  const R=recs();
+  $('#v-actions').innerHTML=`<h2>Action Plan &amp; Follow-up</h2>
+  <p>Recommendations are generated from your own data and benchmarks. Add the ones you accept to the tracker, assign an owner, and measure progress over time.</p>
+  <div class="card"><h3>Recommended interventions</h3>
+   ${R.length?R.map((r,i)=>`<div style="display:flex;gap:12px;justify-content:space-between;align-items:flex-start;border-bottom:1px solid var(--line);padding:10px 0;flex-wrap:wrap"><div style="flex:1;min-width:240px"><b>${esc(r.title)}</b> ${badge(r.pr==='High'?'b-bad':'b-warn',(r.pr==='High'?'▲ ':'● ')+r.pr+' priority')}<div class="mini">${esc(r.why)}</div></div><button class="btn sm" data-rec="${i}">Add to plan</button></div>`).join(''):'<p class="mini">Add cohort data to generate recommendations.</p>'}
+   <div class="note">Recommendations are starting points drawn from common practice in student-success work, not guarantees. Pilot, measure, and adapt to your campus context.</div></div>
+  <div class="grid g2"><div id="aC1"></div><div class="card"><h3>Overall progress</h3><div id="aProg"></div></div></div>
+  <div class="card"><h3>Action tracker</h3><div id="aCrud"></div></div>`;
+  $$('[data-rec]').forEach(b=>b.onclick=()=>{const r=R[+b.dataset.rec];if(S.actions.some(a=>a.title===r.title))return toast('Already in your plan');
+    S.actions.push({id:uid(),title:r.title,owner:'To be assigned',due:addDays(90),status:'Planned',metric:r.metric,baseline:r.base,target:r.target,current:r.base});commit();toast('Added to action tracker')});
+  const prog=a=>{if(a.baseline==null||a.target==null||a.current==null||a.target===a.baseline)return null;return Math.max(0,Math.min(100,(a.current-a.baseline)/(a.target-a.baseline)*100))};
+  const cnt={Planned:0,'In progress':0,Done:0,Blocked:0};S.actions.forEach(a=>{if(cnt[a.status]!=null)cnt[a.status]++});
+  mountChart($('#aC1'),{kind:'bar',title:'Actions by status',sub:'Count of tracked interventions',xName:'Status',labels:Object.keys(cnt),fmt:fN,yMin:0,series:[{name:'Actions',color:C.g,vals:S.actions.length?Object.values(cnt):[]}]});
+  const ps=S.actions.map(prog).filter(x=>x!=null),avg=ps.length?ps.reduce((a,b)=>a+b,0)/ps.length:0;
+  $('#aProg').innerHTML=`<div class="kpi"><div class="v">${Math.round(avg)}%</div><div class="d">average progress from baseline toward target across ${ps.length} measurable action(s)</div></div><div class="meter" style="margin-top:8px"><div style="width:${avg}%"></div></div>`;
+  crud($('#aCrud'),{key:'actions',noun:'action',cols:[
+    {k:'title',label:'Intervention',type:'text',req:1,wide:1,fmt:v=>`<b>${esc(v)}</b>`},{k:'owner',label:'Owner',type:'text'},{k:'due',label:'Due',type:'date'},
+    {k:'status',label:'Status',type:'select',opts:['Planned','In progress','Done','Blocked'],fmt:v=>stBadge(v)},
+    {k:'metric',label:'Success metric',type:'text'},{k:'baseline',label:'Baseline',type:'number'},{k:'target',label:'Target',type:'number'},{k:'current',label:'Current',type:'number'},
+    {k:'prog',label:'Progress',computed:a=>{const p=prog(a);return p==null?'–':`<div class="meter" style="width:80px"><div style="width:${p}%"></div></div><span class="mini">${Math.round(p)}%</span>`}}]});
+}
+</script>
+<script>
+/* ============ HBCU HUB ============ */
+function vHub(){
+  $('#v-hub').innerHTML=`<h2>HBCU Hub — mission-specific tools</h2>
+  <p>Financial-aid optimization, community-engagement metrics and culturally responsive strategies that reflect HBCUs’ distinctive missions, resources and community-based goals.</p>
+  <h3>1 · Financial-aid optimization</h3>
+  <div class="grid g2"><div id="hA1"></div><div id="hA2"></div></div>
+  <div class="card"><div id="aidInsight"></div><div id="aidCrud"></div></div>
+  <h3>2 · Community-engagement metrics</h3>
+  <div class="grid g2"><div id="hC1"></div><div class="card"><div id="comInsight"></div></div></div>
+  <div class="card"><div id="comCrud"></div></div>
+  <h3>3 · Culturally responsive strategies</h3>
+  <div class="grid g3">
+   <div class="card"><b>Alumni networks as a retention asset</b><p class="mini">Match first- and second-year students with alumni mentors from their intended field; track contacts, internships and scholarships generated.</p></div>
+   <div class="card"><b>Greek-letter organizations as partners</b><p class="mini">Historically Black fraternities and sororities can anchor academic-support, service and leadership programming. Set shared GPA and persistence goals and report them with the chapters.</p></div>
+   <div class="card"><b>Belonging, faith and community</b><p class="mini">Partner with congregations, community organizations and families. Recognize the cultural and social capital students bring, and design supports around it — not around deficits.</p></div>
+   <div class="card"><b>Asset-based advising language</b><p class="mini">Train advisors to lead with strengths and goals, name structural barriers (not individual failings), and make help-seeking normal.</p></div>
+   <div class="card"><b>Resource-constrained innovation</b><p class="mini">Prioritize low-cost, high-contact interventions: proactive texting, peer mentors, micro-grants and shared analytics rather than expensive platforms.</p></div>
+   <div class="card"><b>Tell the impact story</b><p class="mini">Combine mobility, equity and community metrics in annual reports to funders, boards and accreditors to demonstrate broader institutional impact.</p></div>
+  </div>`;
+  const a=S.aid.slice().sort((x,y)=>x.year-y.year),la=a[a.length-1];
+  mountChart($('#hA1'),{kind:'line',title:'Pell recipients as a share of enrollment',sub:'Headcount basis',xName:'Year',labels:a.map(x=>String(x.year)),fmt:pctF,axisFmt:axP,series:[{name:'Pell share',color:C.g,vals:a.map(x=>x.enrolled?x.pell/x.enrolled*100:null)}]});
+  mountChart($('#hA2'),{kind:'bar',title:'Average unmet need per student',sub:'Dollars',xName:'Year',labels:a.map(x=>String(x.year)),fmt:fM,axisFmt:v=>'$'+Math.round(v/1000)+'k',yMin:0,series:[{name:'Average unmet need',color:C.y,vals:a.map(x=>x.unmet)}]});
+  $('#aidInsight').innerHTML=la?`<div class="note"><b>Optimization lens (${la.year}):</b> an estimated <b>${fM(la.pell*la.unmet)}</b> in unmet need sits with Pell recipients (${fN(la.pell)} students × ${fM(la.unmet)}). Emergency grants totaled ${fM(la.grants)} — about ${fP(la.pell*la.unmet?la.grants/(la.pell*la.unmet)*100:null)} of that exposure. Prioritize FAFSA completion, verification support, scholarship stacking and micro-grants for students closest to a stop-out.</div>`:'<div class="mini">Add aid records to see the optimization lens.</div>';
+  crud($('#aidCrud'),{key:'aid',noun:'aid year',sort:(x,y)=>x.year-y.year,cols:[
+    {k:'year',label:'Year',type:'number',req:1,min:1990,max:2100,step:1},{k:'enrolled',label:'Enrolled (headcount)',type:'number',req:1,min:0,step:1,fmt:fN},
+    {k:'pell',label:'Pell recipients',type:'number',req:1,min:0,step:1,fmt:fN},{k:'unmet',label:'Avg unmet need $',type:'number',min:0,step:50,fmt:fM},{k:'grants',label:'Emergency grants $',type:'number',min:0,step:500,fmt:fM},
+    {k:'ps',label:'Pell share',computed:r=>r.enrolled?fP(r.pell/r.enrolled*100):'–'}]});
+  const m=S.community;
+  mountChart($('#hC1'),{kind:'bar',title:'Community program participation',sub:'Participants by program',xName:'Program',labels:m.map(x=>x.program),fmt:fN,yMin:0,series:[{name:'Participants',color:C.g,vals:m.map(x=>x.participants)}]});
+  const tp=m.reduce((s,x)=>s+(+x.participants||0),0),th=m.reduce((s,x)=>s+(+x.hours||0),0);
+  $('#comInsight').innerHTML=`<h3>Community footprint</h3><div class="grid g2"><div class="stat"><b>${fN(tp)}</b><span>participants reached</span></div><div class="stat"><b>${fN(th)}</b><span>service &amp; programming hours</span></div><div class="stat"><b>${m.length}</b><span>programs</span></div><div class="stat"><b>${new Set(m.map(x=>x.partner)).size}</b><span>partner organizations</span></div></div><p class="mini" style="margin-top:8px">Track outreach and partnerships here to demonstrate broader institutional impact in annual reports, grant proposals and accreditation narratives.</p>`;
+  crud($('#comCrud'),{key:'community',noun:'program',cols:[
+    {k:'program',label:'Program',type:'text',req:1,wide:1},{k:'partner',label:'Partner',type:'text'},{k:'participants',label:'Participants',type:'number',min:0,step:1,fmt:fN},{k:'hours',label:'Hours',type:'number',min:0,step:1,fmt:fN}]});
+}
+
+/* ============ LEADERSHIP & ACCREDITATION ============ */
+function vLead(){
+  const L=[
+   ['Reading a retention curve like a leader',`<p>Look at <b>trend</b> (is it improving?), <b>level</b> (where are we against peers and the nation?) and <b>spread</b> (which student groups sit below the average?). A single flat number hides all three.</p><p>Ask three questions in every meeting: What changed? For whom? What are we doing about it?</p>`],
+   ['Equity gaps: measure, name, close',`<p>Disaggregate every outcome by Pell status, first-generation status and entry pathway. State the gap in percentage points and track it every cycle. Assign an owner to each gap — a gap without an owner is a statistic, not a strategy.</p>`],
+   ['From IPEDS submission to decision',`<p>IPEDS is a snapshot of what already happened. Pair it with leading indicators — credit completion, early-term grades, advising contact, unmet need — so leadership can act while students are still enrolled.</p>`],
+   ['Briefing the board in five minutes',`<p>One page: three numbers (retention, graduation, equity gap), one benchmark comparison, two interventions with owners and dates, and one ask. Use the PDF Report builder to assemble it.</p>`],
+   ['Closing the assessment loop',`<p>Plan → measure → analyze → act → re-measure. Each action in the tracker needs a baseline, a target and a current value. Review quarterly and retire what does not move the metric.</p>`]];
+  $('#v-lead').innerHTML=`<h2>Leadership Development &amp; Accreditation Alignment</h2>
+  <p>Help leaders interpret and act on data, test scenarios, and align insights with the strategic plan and accreditation expectations.</p>
+  <div class="grid g2"><div><h3>Mini-lessons for staff and leadership</h3>${L.map((l,i)=>`<details class="lesson" ${i===0?'open':''}><summary>${esc(l[0])}</summary><div class="b">${l[1]}</div></details>`).join('')}
+    <div class="note">Webinar &amp; workshop series for your campus can be arranged — see <a href="#" data-go="services">Services</a> or <a href="#" data-contact>contact Professor Ansari</a>.</div></div>
+  <div><h3>Where accreditation evidence comes from</h3><div class="tw"><table><thead><tr><th>Common accreditor theme</th><th>Evidence in this app</th></tr></thead><tbody>
+   <tr><td>Student achievement &amp; success</td><td>Retention, graduation, equity-gap dashboards; benchmarks</td></tr>
+   <tr><td>Institutional effectiveness &amp; assessment</td><td>Action tracker with baselines, targets and current values</td></tr>
+   <tr><td>Planning &amp; resource alignment</td><td>Strategic-plan alignment table; scenario ROI</td></tr>
+   <tr><td>Data integrity &amp; compliance</td><td>Integrity checks; IPEDS component calendar</td></tr>
+   <tr><td>Mission &amp; community impact</td><td>HBCU Hub community metrics</td></tr></tbody></table></div>
+   <p class="mini" style="margin-top:6px">Map these themes to the specific standards of your accreditor (e.g., your regional accreditor’s current standards).</p></div></div>
+  <div class="card"><h3>Strategic plan alignment</h3><p class="mini">Link each strategic objective to a measurable KPI and an accreditation theme.</p><div id="planCrud"></div></div>`;
+  crud($('#planCrud'),{key:'plan',noun:'objective',cols:[
+    {k:'objective',label:'Strategic objective',type:'text',req:1,wide:1},{k:'kpi',label:'KPI',type:'text'},{k:'theme',label:'Accreditation theme',type:'select',opts:['Student achievement','Institutional effectiveness','Planning & resources','Data integrity','Mission & community']},
+    {k:'owner',label:'Owner',type:'text'},{k:'status',label:'Status',type:'select',opts:['Planned','In progress','Done','Blocked'],fmt:stBadge}]});
+}
+
+/* ============ COMPLIANCE ============ */
+function vComp(){
+  const n=S.comp.length,d=S.comp.filter(x=>['Validated','Submitted'].includes(x.status)).length,pc=n?d/n*100:0;
+  $('#v-comp').innerHTML=`<h2>IPEDS &amp; Compliance Calendar</h2>
+  <p>Track each survey component from “not started” to “submitted,” with an owner and notes. Compliance is the floor — outcomes are the goal.</p>
+  <div class="card"><div class="kpi"><div class="l">Components validated or submitted</div><div class="v">${d} of ${n}</div></div><div class="meter"><div style="width:${pc}%"></div></div></div>
+  <div class="card"><div id="compCrud"></div>
+   <div class="note">The default list reflects the usual Fall, Winter and Spring IPEDS collection windows for a degree-granting institution. Confirm the exact components, deadlines and definitions that apply to you in the current NCES IPEDS data-collection calendar; edit this list freely.</div></div>`;
+  const sb=s=>s==='Submitted'||s==='Validated'?badge('b-good','✓ '+esc(s)):s==='In progress'?badge('b-warn','● In progress'):badge('b-mute','○ '+esc(s));
+  crud($('#compCrud'),{key:'comp',noun:'component',cols:[
+    {k:'component',label:'Component',type:'text',req:1,wide:1},{k:'window',label:'Window',type:'select',opts:['Fall','Winter','Spring','Other']},{k:'owner',label:'Owner',type:'text'},
+    {k:'status',label:'Status',type:'select',opts:['Not started','In progress','Validated','Submitted'],fmt:sb},{k:'notes',label:'Notes',type:'textarea',wide:1}]});
+}
+
+/* ============ REPORTS ============ */
+const RP={title:'Institutional Effectiveness & Outcomes Report',notes:'',opts:{summary:1,kpis:1,bench:1,equity:1,gap:1,table:1,scenario:1,actions:1,comp:1,hub:1,about:1}};
+const RLAB={summary:'Executive summary (insights)',kpis:'Key indicators',bench:'Retention & graduation vs. benchmarks',equity:'Equity lens (Pell vs. non-Pell)',gap:'Gap-to-benchmark & cohort funnel',table:'Cohort data table',scenario:'Scenario / ROI summary',actions:'Action plan & progress',comp:'IPEDS compliance status',hub:'HBCU Hub (aid & community)',about:'About the consultant & contact'};
+function contactLine(){const s=S.settings;return [s.email&&('Email: '+esc(s.email)),s.phone&&('Phone: '+esc(s.phone)),s.web&&('Web: '+esc(s.web))].filter(Boolean).join(' · ')}
+function buildReport(){
+  const st=S.settings,L=latest(),o=RP.opts,ins=insights();let h='<div class="paper">';
+  h+=`<div class="rh"><div><h1>${esc(RP.title)}</h1><div><b>${esc(st.inst)}</b></div><div class="mini">Prepared by ${esc(st.prepared)} · ${today()}</div></div><div style="text-align:right"><div class="bm" lang="ar">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div><div class="mini"><b>Creed-to-Commerce™</b><br>HBCU Outcomes Navigator</div></div></div>`;
+  if(st.sample)h+='<div class="note red"><b>Draft with illustrative sample data.</b> Replace with your institution’s verified figures before circulating.</div>';
+  if(o.summary)h+=`<h2>Executive summary</h2>${ins.length?'<ul>'+ins.map(i=>`<li><b>${esc(i.area)}:</b> ${esc(i.text)}</li>`).join('')+'</ul>':'<p>No cohort data entered.</p>'}`;
+  if(o.kpis&&L)h+=`<h2>Key indicators — ${L.year} cohort</h2><div class="kg avoid"><div><b>${fP(L.ret)}</b><span>First-year retention</span></div><div><b>${fP(L.grad)}</b><span>6-year graduation</span></div><div><b>${L.pellGrad!=null&&L.nonPellGrad!=null?(L.nonPellGrad-L.pellGrad).toFixed(1)+' pp':'–'}</b><span>Pell equity gap</span></div><div><b>${fN(L.entering)}</b><span>Entering cohort</span></div></div>`;
+  if(o.bench)h+=`<h2>Benchmark comparison</h2>${reportChart(specBench('ret'))}${reportChart(specBench('grad'))}<p class="mini">Benchmarks: peer HBCUs ${fP(st.peerRet)} retention / ${fP(st.peerGrad)} graduation; national ${fP(st.natRet)} / ${fP(st.natGrad)} (user-entered values — verify against IPEDS).</p>`;
+  if(o.equity)h+=`<h2>Equity lens</h2>${reportChart(specEquity())}`;
+  if(o.gap)h+=`<h2>Gaps and cohort funnel</h2>${reportChart(specGap())}${reportChart(specFunnel())}`;
+  if(o.table)h+=`<h2>Cohort data</h2><div class="avoid"><table><thead><tr>${cohortCols.map(c=>`<th>${esc(c.label)}</th>`).join('')}</tr></thead><tbody>${sortedC().map(r=>'<tr>'+cohortCols.map(c=>`<td>${c.fmt?c.fmt(r[c.k]):esc(r[c.k]==null?'–':r[c.k])}</td>`).join('')+'</tr>').join('')}</tbody></table></div>`;
+  if(o.scenario){const s=scnCalc(),p=S.scn;h+=`<h2>Scenario &amp; ROI summary</h2><div class="avoid"><table><tbody><tr><td>Retention improvement (full effect)</td><td>${p.dRet.toFixed(1)} pp</td></tr><tr><td>Graduation improvement</td><td>${p.dGrad.toFixed(1)} pp</td></tr><tr><td>Additional years persisted per retained student</td><td>${p.persist}</td></tr><tr><td>Net tuition per student per year</td><td>${fM(st.tuition)}</td></tr><tr><td>Extra students retained per year</td><td><b>${fN(s.addRet)}</b></td></tr><tr><td>Extra graduates per cohort</td><td><b>${fN(s.addGrad)}</b></td></tr><tr><td>5-year net tuition retained (est.)</td><td><b>${fM(s.rev)}</b></td></tr><tr><td>5-year program cost</td><td>${fM(s.cost)}</td></tr><tr><td>5-year ROI (est.)</td><td><b>${s.roi==null?'–':Math.round(s.roi)+'%'}</b></td></tr></tbody></table><p class="mini">Planning estimates based on stated assumptions; not a forecast.</p></div>`}
+  if(o.actions)h+=`<h2>Action plan</h2><div class="avoid"><table><thead><tr><th>Intervention</th><th>Owner</th><th>Due</th><th>Status</th><th>Metric</th><th>Baseline</th><th>Target</th><th>Current</th></tr></thead><tbody>${S.actions.map(a=>`<tr><td>${esc(a.title)}</td><td>${esc(a.owner)}</td><td>${esc(a.due)}</td><td>${esc(a.status)}</td><td>${esc(a.metric)}</td><td>${esc(a.baseline)}</td><td>${esc(a.target)}</td><td>${esc(a.current)}</td></tr>`).join('')||'<tr><td colspan="8">No actions tracked.</td></tr>'}</tbody></table></div>`;
+  if(o.comp)h+=`<h2>IPEDS compliance status</h2><div class="avoid"><table><thead><tr><th>Component</th><th>Window</th><th>Owner</th><th>Status</th></tr></thead><tbody>${S.comp.map(a=>`<tr><td>${esc(a.component)}</td><td>${esc(a.window)}</td><td>${esc(a.owner)}</td><td>${esc(a.status)}</td></tr>`).join('')||'<tr><td colspan="4">No components listed.</td></tr>'}</tbody></table></div>`;
+  if(o.hub){const a=S.aid.slice().sort((x,y)=>x.year-y.year);h+=`<h2>HBCU Hub</h2>${reportChart({kind:'line',title:'Pell recipients as a share of enrollment',sub:'',labels:a.map(x=>String(x.year)),fmt:pctF,axisFmt:axP,series:[{name:'Pell share',color:C.g,vals:a.map(x=>x.enrolled?x.pell/x.enrolled*100:null)}]})}<div class="avoid"><table><thead><tr><th>Community program</th><th>Partner</th><th>Participants</th><th>Hours</th></tr></thead><tbody>${S.community.map(m=>`<tr><td>${esc(m.program)}</td><td>${esc(m.partner)}</td><td>${fN(m.participants)}</td><td>${fN(m.hours)}</td></tr>`).join('')||'<tr><td colspan="4">None recorded.</td></tr>'}</tbody></table></div>`}
+  if(RP.notes.trim())h+=`<h2>Analyst notes</h2><p>${esc(RP.notes).replace(/\n/g,'<br>')}</p>`;
+  if(o.about)h+=`<h2>About the consultant</h2><div class="avoid"><p><b>Professor Zaid Adib Ansari</b> — Founder &amp; Principal Consultant, The Balanced Middle Path Academy, LLC (BMPA). Thirty-plus years of international higher-education leadership, including Executive Director of Institutional Research at the American University in Cairo and Acting Campus Vice President at George Mason University UAE. Expertise: institutional research and IPEDS-style reporting, statistics (SPSS), business intelligence and grant writing. Author of <i>Cracked Mirrors: Emmett Till to Barack Obama and My Path to Authentic Islam</i>.</p><p>${contactLine()}</p></div>`;
+  h+=`<div class="foot">Prepared with the HBCU Outcomes Navigator · Creed-to-Commerce™ · The Balanced Middle Path Academy, LLC · ${contactLine()}<br>Student-level records are never included in reports. Verify all figures against official IPEDS/NCES data before external use.</div></div>`;
+  return h;
+}
+function printHTML(html){const pa=$('#printArea');pa.innerHTML=html;toast('Opening print dialog — choose “Save as PDF”');setTimeout(()=>{try{window.print()}catch(e){toast('Printing is blocked here. Open the file in a full browser tab.')}},250)}
+function vReports(){
+  $('#v-reports').innerHTML=`<h2>PDF Reports</h2><p>Build an informative, branded report from your current data, preview it, then print or save it as a PDF (choose “Save as PDF” in the print dialog).</p>
+  <div class="grid g2" style="grid-template-columns:minmax(260px,340px) 1fr;align-items:start">
+   <div class="card"><h3>Report options</h3>
+    <div style="margin-bottom:10px"><label for="rt">Report title</label><input id="rt" value="${esc(RP.title)}"></div>
+    <div style="margin-bottom:10px"><label for="ri">Institution</label><input id="ri" value="${esc(S.settings.inst)}"></div>
+    <div style="margin-bottom:10px"><label for="rn">Analyst notes (optional)</label><textarea id="rn" rows="4">${esc(RP.notes)}</textarea></div>
+    <label>Include sections</label>${Object.keys(RLAB).map(k=>`<label style="font-weight:500;display:flex;gap:8px;align-items:center;margin:3px 0"><input type="checkbox" style="width:auto" data-o="${k}" ${RP.opts[k]?'checked':''}> ${esc(RLAB[k])}</label>`).join('')}
+    <div class="tools"><button class="btn gold" id="rPrint">Print / Save as PDF</button></div></div>
+   <div><div id="rPrev"></div></div></div>`;
+  const draw=()=>{$('#rPrev').innerHTML=buildReport()};
+  $('#rt').oninput=e=>{RP.title=e.target.value;draw()};
+  $('#ri').oninput=e=>{S.settings.inst=e.target.value;save();draw()};
+  $('#rn').oninput=e=>{RP.notes=e.target.value;draw()};
+  $$('[data-o]').forEach(c=>c.onchange=()=>{RP.opts[c.dataset.o]=c.checked?1:0;draw()});
+  $('#rPrint').onclick=()=>printHTML(buildReport());draw();
+}
+
+/* ============ SERVICES ============ */
+function vServices(){
+  const tier=(n,tag,items,f)=>`<div class="card tier ${f?'featured':''}"><h3>${n}</h3><div class="mini">${tag}</div><ul>${items.map(i=>`<li>${i}</li>`).join('')}</ul><a class="btn ${f?'gold':''}" href="${mailto('HBCU Outcomes Navigator — '+n+' tier inquiry','Hello Professor Ansari,\n\nI am interested in the '+n+' tier. Institution:\nRole:\nBest time to talk:\n')}">Request a quote</a></div>`;
+  $('#v-services').innerHTML=`<h2>Services &amp; Pricing</h2>
+  <p>A platform <i>and</i> a partner: the software turns data into insight; Professor Ansari’s consulting turns insight into campus-wide change.</p>
+  <div class="card tint"><b>HBCU rate:</b> a special licensing rate and pilot pricing for HBCUs and under-resourced institutions, in keeping with the mission of this work. <a href="#" data-contact>Ask for an HBCU quote</a>.</div>
+  <h3>Subscription / licensing tiers</h3>
+  <div class="grid g3">
+   ${tier('Basic','Compliance-ready foundation',['Data Workspace with integrity checks','Core outcome dashboards','Branded PDF reports','Edit / remove / clear data tools'])}
+   ${tier('Standard','Most popular for student-success teams',['Everything in Basic','Peer &amp; national benchmarking','Action-plan generator and tracker','Early-alert scoring','Scenario Planner &amp; ROI'],1)}
+   ${tier('Premium','Depth for system-level and research-intensive use',['Everything in Standard','Predictive models calibrated to your historical data','Custom peer sets and deeper benchmarking','Leadership briefings &amp; priority support'])}
+  </div>
+  <div class="note">This demo includes every module so you can evaluate the whole workflow; tiers describe how a production licence is packaged. Pricing is quoted on request.</div>
+  <h3>Consulting bundles</h3>
+  <div class="grid g3">
+   <div class="card"><b>Implementation &amp; training</b><p class="mini">On-site or virtual sessions that embed the platform in daily operations: data onboarding, IPEDS validation workflow, dashboard literacy for staff and deans.</p></div>
+   <div class="card"><b>Continuous-improvement retainer</b><p class="mini">Ongoing analysis each cycle: leadership reports, benchmark updates, intervention recommendations and progress reviews against targets.</p></div>
+   <div class="card"><b>Project &amp; short-term engagements</b><p class="mini">Accreditation evidence support, equity-gap deep dives, grant-ready data narratives, strategic-plan KPI design and pilot programs at a reduced rate.</p></div>
+  </div>
+  <h3>Roadmap from pilot to partnership</h3>
+  <div class="card"><div class="grid g3">${[['Validate','Interview IR directors and administrators; confirm the top must-have features.'],['Pilot','Run a small cohort including at least one HBCU; capture time saved, insights gained, interventions launched.'],['Refine','Fine-tune dashboards, add predictive models and HBCU/leadership modules.'],['Launch','Present at higher-ed events; publish case studies; target compliance officers and student-success/dean’s offices.'],['Package','Offer short-term, retainer and project-based consulting with clearly defined deliverables.'],['Sustain','Track IPEDS and accreditation changes; keep an HBCU advisory circle; host user-group webinars.']].map((x,i)=>`<div class="step"><div class="n">${i+1}</div><div><b>${x[0]}</b><div class="mini">${x[1]}</div></div></div>`).join('')}</div></div>
+  <div class="card"><h3>Partnerships &amp; affiliations</h3><p>Collaboration with higher-education associations and philanthropic organizations committed to HBCU outcomes can extend access and funding. If your association or foundation would like to explore a partnership, <a href="#" data-contact>get in touch</a>.</p></div>`;
+}
+
+/* ============ ABOUT ============ */
+function vAbout(){
+  const s=S.settings,ex={'IPEDS & institutional research':['Data Workspace','Compliance Calendar','Reliable submissions start with clean, validated cohort data and an owned calendar — the discipline built over decades of institutional-research leadership.'],'Statistics (SPSS)':['Dashboard','Early Alert','Trend, gap and risk analysis grounded in applied statistics — so charts answer real questions, not decorate slides.'],'Business intelligence':['Dashboard','Scenario Planner','Dashboards leaders actually use: benchmarked, drill-able and tied to decisions.'],'Grant writing':['Reports','HBCU Hub','Outcome and community data shaped into the evidence funders and foundations ask for.'],'Higher-ed leadership':['Leadership & Accreditation','Action Plan','Executive-level experience connecting data to strategic planning and accreditation.'],'International & cross-cultural':['HBCU Hub','Services','Experience across the US, UAE and Egypt informs culturally responsive, mission-centered strategy.']};
+  $('#v-about').innerHTML=`<div class="card" style="border:2px solid var(--goldl)"><div class="prof">
+    <div><div class="avatar" aria-hidden="true">ZA</div></div>
+    <div><span class="pill dk">Founder &amp; Principal Consultant · BMPA</span>
+    <h1>Professor Zaid Adib Ansari</h1>
+    <p style="font-size:1.05rem">Institutional Effectiveness Consultant and Data-Driven Transformation Strategist. I help colleges — especially HBCUs — turn federally mandated reporting into decisions that raise retention, close equity gaps and strengthen accreditation outcomes.</p>
+    <div class="grid g3"><div class="stat"><b>30+</b><span>years in international higher-education leadership</span></div><div class="stat"><b>US · UAE · Egypt</b><span>countries of professional experience</span></div><div class="stat"><b>IR · SPSS · BI</b><span>institutional research, statistics, business intelligence &amp; grants</span></div></div></div></div></div>
+  <div class="grid g2">
+   <div class="card"><h3>Professional &amp; academic profile</h3><div class="tw" style="max-height:none"><table><tbody>
+    <tr><th style="width:38%">Academic standing</th><td>Professor · ABD (All But Dissertation)</td></tr>
+    <tr><th>Current role</th><td>Founder &amp; Principal Consultant, The Balanced Middle Path Academy, LLC (BMPA)</td></tr>
+    <tr><th>Institutional research</th><td>Former Executive Director of Institutional Research, American University in Cairo (Egypt)</td></tr>
+    <tr><th>Campus leadership</th><td>Former Acting Campus Vice President, George Mason University UAE</td></tr>
+    <tr><th>Core expertise</th><td>IPEDS-style compliance reporting, institutional effectiveness, statistics (SPSS), business intelligence, grant writing</td></tr>
+    <tr><th>Published author</th><td><i>Cracked Mirrors: Emmett Till to Barack Obama and My Path to Authentic Islam</i></td></tr>
+    <tr><th>Based in</th><td>Kuala Lumpur, Malaysia · roots in the United States · serving clients worldwide</td></tr></tbody></table></div></div>
+   <div class="card"><h3>Why the consultant matters as much as the software</h3><p>Compliance data rarely fails because of a missing chart; it fails because no one owns the next step. Every module in this app reflects hands-on experience of IPEDS complexities, the pitfalls that cause resubmissions, and the leadership conversations that turn a number into an intervention.</p><p>That is why the platform is offered with implementation, training and continuous-improvement consulting — you get a tool <b>and</b> a partner who has done this work inside institutions.</p>
+   <p class="mini">Brand: <b>Creed-to-Commerce™</b> — a framework in which work flows from, and remains accountable to, a creed of integrity and service.</p></div></div>
+  <div class="card"><h3>How the expertise maps to the app — click an area</h3>
+   <div id="exChips" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px">${Object.keys(ex).map((k,i)=>`<button class="btn sm ${i?'ghost':''}" data-ex="${esc(k)}">${esc(k)}</button>`).join('')}</div>
+   <div id="exOut" class="note" style="background:#F3F8F5;border-left-color:var(--green2)"></div></div>
+  <div class="card" id="contact" style="border:2px solid var(--goldl)"><h2>Contact Professor Ansari</h2>
+   <p>Request a demonstration, an HBCU quote, a pilot, a keynote or workshop, or a conversation about your institution’s data.</p>
+   <div class="grid g2"><div>
+     <div class="stat" style="text-align:left;margin-bottom:10px"><span>Email</span><b style="font-size:1.35rem"><a href="${mailto('HBCU Outcomes Navigator — consultation request','')}" id="abEmail">${esc(s.email)||'Set your email in Settings'}</a></b></div>
+     ${s.phone?`<div class="stat" style="text-align:left;margin-bottom:10px"><span>Phone / WhatsApp</span><b style="font-size:1.35rem">${esc(s.phone)}</b></div>`:''}
+     ${s.web?`<div class="stat" style="text-align:left;margin-bottom:10px"><span>Website</span><b style="font-size:1.2rem">${esc(s.web)}</b></div>`:''}
+     <div class="mini">Kuala Lumpur, Malaysia (UTC+8) · virtual engagements worldwide; on-site by arrangement.</div>
+     <div class="tools"><button class="btn sm ghost" id="copyMail">Copy email address</button></div></div>
+    <div><h3>Send an inquiry</h3>
+     <div class="row"><div><label for="cN">Your name</label><input id="cN"></div><div><label for="cI">Institution</label><input id="cI"></div></div>
+     <div style="margin:10px 0"><label for="cT">I’m interested in</label><select id="cT"><option>A product demonstration</option><option>HBCU pricing / pilot</option><option>Implementation &amp; training</option><option>Continuous-improvement consulting</option><option>Workshop, webinar or keynote</option><option>Partnership or funding</option></select></div>
+     <div style="margin-bottom:10px"><label for="cM">Message</label><textarea id="cM" rows="3"></textarea></div>
+     <button class="btn gold" id="cSend">Open email to send</button>
+     <div class="mini" style="margin-top:6px">This opens your email app with the message prefilled — nothing is sent from this page.</div></div></div></div>`;
+  const show=k=>{$('#exOut').innerHTML=`<b>${esc(k)}</b> → powers <b>${esc(ex[k][0])}</b> and <b>${esc(ex[k][1])}</b>.<br>${esc(ex[k][2])}`;$$('[data-ex]').forEach(b=>b.classList.toggle('ghost',b.dataset.ex!==k))};
+  $$('[data-ex]').forEach(b=>b.onclick=()=>show(b.dataset.ex));show(Object.keys(ex)[0]);
+  $('#copyMail').onclick=()=>{try{navigator.clipboard.writeText(S.settings.email).then(()=>toast('Email address copied'),()=>toast(S.settings.email))}catch(e){toast(S.settings.email)}};
+  $('#cSend').onclick=()=>{location.href=mailto('HBCU Outcomes Navigator — '+$('#cT').value,'Name: '+$('#cN').value+'\nInstitution: '+$('#cI').value+'\nInterested in: '+$('#cT').value+'\n\n'+$('#cM').value)};
+}
+
+/* ============ MANUAL ============ */
+function manualHTML(){
+  const mod=(n,what,how)=>`<h3>${n}</h3><p>${what}</p><ol>${how.map(x=>`<li>${x}</li>`).join('')}</ol>`;
+  return `<div class="paper"><div class="rh"><div><h1>HBCU Outcomes Navigator — User Manual</h1><div class="mini">From IPEDS compliance to institutional effectiveness · ${today()}</div></div><div style="text-align:right"><div class="bm" lang="ar">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div><div class="mini"><b>Creed-to-Commerce™</b><br>Professor Zaid Adib Ansari</div></div></div>
+  <h2>1. Welcome and purpose</h2><p>The Navigator turns federally mandated reporting (such as IPEDS) and internal data into actionable insight for student success — retention, graduation and equity — with a dedicated lens for HBCUs. It follows a simple path: <b>import and validate → see the gaps → act → prove the impact</b>.</p>
+  <h2>2. Quick start (10 minutes)</h2><ol><li>Open <b>Settings</b> and enter your institution name, contact details, benchmark values and net tuition per student.</li><li>Open <b>Data Workspace</b>. Use <b>Clear all cohort data</b> to remove the sample, then <b>Add cohort</b> or <b>Import CSV</b> with your own figures.</li><li>Read the <b>Data integrity checks</b> and correct any flagged errors.</li><li>Explore the <b>Outcomes Dashboard</b>; hover over charts and use <b>View table</b> for exact values.</li><li>Open <b>Action Plan</b>, add recommended interventions, assign owners and update the current value each term.</li><li>Open <b>PDF Reports</b>, choose sections, preview and use <b>Print / Save as PDF</b>.</li></ol>
+  <h2>3. Module guide</h2>
+  ${mod('Overview','A scorecard, auto-generated insights, and an interactive business-case slider.',['Review the four headline indicators.','Read “What the data is telling you.”','Drag the retention slider to see students and net tuition retained.'])}
+  ${mod('Data Workspace','The single source of truth for entering-cohort outcomes.',['<b>Add</b> a record with the form (required fields are starred).','<b>Edit</b> or <b>Remove</b> any row; removal asks for confirmation.','<b>Clear all</b> deletes every record in that table; <b>Restore sample data</b> reloads the illustrative set.','<b>Export CSV</b> gives an import template; <b>Import CSV</b> appends rows whose headers match.'])}
+  ${mod('Outcomes Dashboard','Interactive charts for trend, benchmarks, equity gap, funnel, demographics and cohort size.',['Choose the metric and the cohort range.','Hover or touch a chart for values.','Use <b>View table</b> for an accessible data table.'])}
+  ${mod('Early Alert','A transparent risk score for pseudonymous students.',['Adjust factor weights to your evidence.','Add students with anonymous IDs; sort is by risk.','Use the suggested outreach for each band.','<i>Not a validated model — calibrate before decisions. Follow FERPA.</i>'])}
+  ${mod('Scenario Planner','What-if analysis for leadership.',['Set retention and graduation improvements, persistence years, program cost and net tuition.','Review extra students retained, graduates, net tuition retained and ROI.','Treat results as planning estimates, not forecasts.'])}
+  ${mod('Action Plan','Recommendations from your data plus a tracker with baselines, targets and progress.',['Click <b>Add to plan</b> on a recommendation.','Edit owner, due date, status, baseline, target and current values.','Remove actions that are finished or no longer relevant.'])}
+  ${mod('HBCU Hub','Financial-aid optimization, community-engagement metrics and culturally responsive strategies.',['Maintain yearly aid records and community programs.','Use the optimization lens to size unmet need among Pell students.','Cite community metrics in reports and grant proposals.'])}
+  ${mod('Leadership &amp; Accreditation','Mini-lessons, accreditation evidence map and strategic-plan alignment table.',['Share lessons with staff and leaders.','Link each strategic objective to a KPI and accreditation theme.'])}
+  ${mod('IPEDS Compliance','A calendar of survey components with owners, notes and status.',['Edit the default list to match your institution’s required components.','Move items through Not started → In progress → Validated → Submitted.'])}
+  <h2>4. Editing and removing data — at a glance</h2><p>Every table offers <b>Add</b>, <b>Edit</b>, <b>Remove</b>, <b>Clear all</b>, <b>Restore sample data</b> and <b>Export CSV</b>. In <b>Settings</b>, global tools clear or restore everything and export or import a full JSON backup.</p>
+  <h2>5. Creating PDF reports</h2><p>Use <b>PDF Reports</b> to select sections, add notes and preview. Choose <b>Print / Save as PDF</b> and, in the print dialog, set the destination to “Save as PDF.” Turn off “Headers and footers” for the cleanest result. Student-level records are never included.</p>
+  <h2>6. Key definitions</h2><ul><li><b>First-year retention:</b> share of a first-time, full-time entering cohort that returns the following fall.</li><li><b>6-year graduation rate:</b> share of that cohort completing within 150% of normal time for a four-year degree.</li><li><b>Equity gap:</b> difference in an outcome between groups (here, non-Pell minus Pell), in percentage points (pp).</li><li><b>Unmet need:</b> cost of attendance minus expected family contribution and gift aid.</li><li><b>Benchmark:</b> a reference value from peer HBCUs or national data; edit these in Settings from IPEDS Data Center figures.</li></ul>
+  <h2>7. Data privacy and good practice</h2><ul><li>Data is stored only in your browser on this device; clearing site data removes it. Export backups regularly.</li><li>Use pseudonymous student IDs. Do not enter names, SSNs or other direct identifiers.</li><li>Follow FERPA and your institution’s data-governance policy. Verify all figures against official IPEDS/NCES data.</li><li>Sample data and default benchmarks are illustrative placeholders only.</li></ul>
+  <h2>8. Support and consulting</h2><p>For demonstrations, HBCU pricing, implementation, training, workshops or continuous-improvement consulting, contact <b>Professor Zaid Adib Ansari</b>, Founder &amp; Principal Consultant, The Balanced Middle Path Academy, LLC. ${contactLine()}</p>
+  <div class="foot">Creed-to-Commerce™ · The Balanced Middle Path Academy, LLC</div></div>`;
+}
+function vManual(){$('#v-manual').innerHTML=`<div class="tools"><button class="btn gold" id="mPrint">Print / Save manual as PDF</button></div>`+manualHTML();$('#mPrint').onclick=()=>printHTML(manualHTML())}
+
+/* ============ SETTINGS ============ */
+function vSettings(){
+  const s=S.settings;
+  $('#v-settings').innerHTML=`<h2>Settings &amp; Data Tools</h2>
+  <div class="grid g2"><div class="card"><h3>Institution &amp; consultant contact</h3>
+    <div class="row"><div style="grid-column:1/-1"><label for="sI">Institution name</label><input id="sI" value="${esc(s.inst)}"></div>
+    <div style="grid-column:1/-1"><label for="sP">Prepared by</label><input id="sP" value="${esc(s.prepared)}"></div>
+    <div><label for="sE">Contact email (shown in app, reports &amp; manual)</label><input id="sE" type="email" value="${esc(s.email)}"></div>
+    <div><label for="sPh">Phone / WhatsApp (optional)</label><input id="sPh" value="${esc(s.phone)}"></div>
+    <div style="grid-column:1/-1"><label for="sW">Website (optional)</label><input id="sW" value="${esc(s.web)}" placeholder="https://"></div></div></div>
+   <div class="card"><h3>Benchmarks &amp; assumptions</h3><p class="mini">Defaults are placeholders — replace with figures from the IPEDS Data Center for your peer set and sector.</p>
+    <div class="row"><div><label for="sB1">Peer HBCU retention %</label><input id="sB1" type="number" step=".1" value="${s.peerRet}"></div><div><label for="sB2">Peer HBCU 6-yr graduation %</label><input id="sB2" type="number" step=".1" value="${s.peerGrad}"></div>
+    <div><label for="sB3">National retention %</label><input id="sB3" type="number" step=".1" value="${s.natRet}"></div><div><label for="sB4">National 6-yr graduation %</label><input id="sB4" type="number" step=".1" value="${s.natGrad}"></div>
+    <div style="grid-column:1/-1"><label for="sB5">Net tuition &amp; fees per student per year ($)</label><input id="sB5" type="number" step="100" value="${s.tuition}"></div></div></div></div>
+  <div class="tools"><button class="btn" id="sSave">Save settings</button></div>
+  <div class="card"><h3>Global data tools</h3><div class="tools">
+    <button class="btn danger" id="gClear">Clear ALL data (all tables)</button>
+    <button class="btn ghost" id="gRestore">Restore ALL sample data</button>
+    <button class="btn ghost" id="gExport">Export backup (JSON)</button>
+    <button class="btn ghost" id="gImport">Import backup (JSON)</button><input type="file" id="gFile" accept=".json,application/json" hidden></div>
+   <div class="mini">Clearing removes cohort, aid, community, student, action, compliance and plan records but keeps your settings.</div></div>`;
+  $('#sSave').onclick=()=>{Object.assign(S.settings,{inst:$('#sI').value,prepared:$('#sP').value,email:$('#sE').value.trim(),phone:$('#sPh').value,web:$('#sW').value,peerRet:+$('#sB1').value,peerGrad:+$('#sB2').value,natRet:+$('#sB3').value,natGrad:+$('#sB4').value,tuition:+$('#sB5').value});commit();toast('Settings saved')};
+  $('#gClear').onclick=async()=>{if(await ask('Delete ALL data in every table? Settings are kept. This cannot be undone.','Clear everything')){['cohorts','aid','community','students','actions','comp','plan'].forEach(k=>S[k]=[]);S.settings.sample=false;commit();toast('All data cleared')}};
+  $('#gRestore').onclick=async()=>{if(await ask('Replace all data with the illustrative sample set?','Restore sample',false)){const d=sample();['cohorts','aid','community','students','actions','comp','plan'].forEach(k=>S[k]=d[k]);S.settings.sample=true;commit();toast('Sample data restored')}};
+  $('#gExport').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,1)],{type:'application/json'}));a.download='hbcu-navigator-backup.json';document.body.appendChild(a);a.click();a.remove()};
+  $('#gImport').onclick=()=>$('#gFile').click();
+  $('#gFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const p=JSON.parse(r.result);if(!p||typeof p!=='object'||!Array.isArray(p.cohorts))throw 0;const d=sample();Object.keys(d).forEach(k=>{if(p[k]!==undefined)d[k]=(k==='settings'||k==='weights'||k==='scn')?Object.assign(d[k],p[k]):p[k]});S=d;commit();toast('Backup imported')}catch(x){toast('Not a valid backup file')}};r.readAsText(f)};
+}
+
+/* ============ ROUTER ============ */
+const TABS=[['overview','Overview',vOverview],['data','Data Workspace',vData],['dash','Outcomes Dashboard',vDash],['alert','Early Alert',vAlert],['scenario','Scenario Planner',vScenario],['actions','Action Plan',vActions],['hub','HBCU Hub',vHub],['lead','Leadership & Accreditation',vLead],['comp','IPEDS Compliance',vComp],['reports','PDF Reports',vReports],['services','Services & Pricing',vServices],['about','About Professor Ansari',vAbout],['manual','User Manual',vManual],['settings','Settings',vSettings]];
+let cur='overview';
+function refresh(){const t=TABS.find(x=>x[0]===cur);t[2]();const m=$('#ftMail');m.textContent=S.settings.email||'set in Settings';m.href=mailto('HBCU Outcomes Navigator inquiry','')}
+function go(id,anchor){cur=id;$$('section.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+id));$$('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===id));refresh();
+  const on=$('#tabs button.on');if(on&&on.scrollIntoView)on.scrollIntoView({inline:'center',block:'nearest'});
+  if(anchor&&document.getElementById(anchor))document.getElementById(anchor).scrollIntoView({behavior:'smooth'});else window.scrollTo(0,0)}
+function init(){
+  S=load();
+  $('#tabs').innerHTML=TABS.map(t=>`<button data-t="${t[0]}">${esc(t[1])}</button>`).join('');
+  $('#tabs').onclick=e=>{const b=e.target.closest('button');if(b)go(b.dataset.t)};
+  document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g){e.preventDefault();go(g.dataset.go);return}
+    if(e.target.closest('[data-contact]')||e.target.closest('#hdrContact')){e.preventDefault();go('about','contact')}});
+  go('overview');
+}
+init();
+</script>
+</body>
+</html>
